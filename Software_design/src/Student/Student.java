@@ -82,9 +82,9 @@ class Status{
 		
 	}
 	public void print(){		//현재 상태 출력
-		System.out.println("First Stat" + first_stat);
-		System.out.println("Second stat" + final_stat);
-		System.out.println("transfer Stat" + transfer_stat);
+		System.out.println("First Stat: " + first_stat);
+		System.out.println("Second Stat: " + final_stat);
+		System.out.println("Transfer Stat: " + transfer_stat);
 
 	}
 	
