@@ -1,9 +1,9 @@
 package Student;
-//학생 package
+//Student package
 import Bulletin.Bulletin;
 class Student{
-	String stu_name;			//학생 이름
-	String stu_number;			//학번
+	String stu_name;			//Student name
+	String stu_number;			//Sutdent number
 	public Student(String name, String num) {
 		stu_name=name;
 		stu_number=num;
