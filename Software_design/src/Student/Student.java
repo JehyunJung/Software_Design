@@ -9,7 +9,7 @@ class Student{
 		stu_number=num;
 	}
 	
-	public void see_cur_record() {			//현재 상태 조회
+	public void see_cur_record() {			//search for student's current record
 		
 	}
 	public boolean register_documnet() {	//서류 등록
