@@ -1,6 +1,9 @@
 package Application;
+<<<<<<< HEAD
 
 import java.util.Scanner;
+=======
+>>>>>>> b025b949b772ab0885affff81cc2757e40669304
 
 public class Application{
 
