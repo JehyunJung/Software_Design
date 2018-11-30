@@ -1,5 +1,4 @@
-package social_design;
-
+package Application;
 
 public class Application_system {
 
