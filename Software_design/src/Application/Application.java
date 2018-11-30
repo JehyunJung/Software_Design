@@ -1,13 +1,17 @@
 package Application;
-import Person.*;
+
 import java.util.Scanner;
+import Person.*;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
+
+
 
 
 
@@ -48,9 +52,10 @@ public class Application{
 		String ID, PW;
 		String info_ID, info_PW,info_name,info_num,info_score;
 		int info_type;
-
+		File file=new File("information.txt");
 		
 		Scanner sc = new Scanner(System.in);
+		
 		System.out.println("Input ID : ");
 		ID=sc.nextLine();
 		
@@ -58,7 +63,7 @@ public class Application{
 		PW=sc.nextLine();
 		
 		try {
-			sc =new Scanner(Paths.get("information.txt"));
+			sc =new Scanner(file);
 		}
 		catch(IOException e) {
 			e.printStackTrace();
