@@ -23,34 +23,34 @@ public class Status{
 	public boolean see_course() {		//print course info
 		
 	}	
-	public boolean add_record() {		//
+	public boolean add_record() {		//add record status
 		
 	}
-	public void show_info() {			//�긽�깭 �젙蹂� ?��?��?��
+	public void show_info() {			//print status
 		
 	}
-	public boolean first_application_check() {	//湲곌컙�?�� 1李④�? 留욌?�� 吏� �솗�씤
+	public boolean first_application_check() {	//check if the step is in first application step
 		
 	}	
-	public boolean final_application_check() {	//湲곌컙�?�� 1李④�? 留욌?�� 吏� �솗�씤
+	public boolean final_application_check() {	//check if the step is in the final application step
 		
 	}
-	public boolean transfer_credit_application_check() {	//湲곌컙�?�� 1李④�? 留욌?�� 吏� �솗�씤
+	public boolean transfer_credit_application_check() {	//check if the step is in the transfer application step
 	
 	}
-	public boolean first_modify() {			//�븰�깮�쓽 1李� 吏��썝 �긽�깭 蹂�寃�
+	public boolean first_modify() {			// set STEP -> 
 		
 	}
-	public boolean second_modify() {			//�븰�깮�쓽 理쒖�? 吏��썝 �긽�깭 蹂�寃�
+	public boolean second_modify() {		// set STEP -> 
 		
 	}
-	public boolean final_modify() {			//�븰�젏 �씤�젙 �떊泥� �긽�깭 蹂�寃�
+	public boolean final_modify() {			// set STEP -> 
 		
 	}
-	public boolean upload() {	//�씤�뒪�꽩�뒪?���? DB�뿉 ���옣
+	public boolean upload() {	// Upload status data to DB
 		
 	}
-	public Status download() {	//�씤�뒪�꽩�뒪?���? DB�뿉�꽌 媛��졇�삩�떎.
+	public Status download() {	// Download status from DB with Student ID
 		
 	}
 	public void print(){		//�쁽�옱 �긽�깭 ?��?��?��
