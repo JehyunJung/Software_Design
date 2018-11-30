@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.io.FileWriter;
 
 import Application.*;
 import Bulletin.*;
@@ -13,7 +14,6 @@ import Status.*;
 
 public class Student extends Person {
 	String score;
-	
 
 	public Student(String name, String number, String score) {
 		super(name, number);
@@ -36,7 +36,7 @@ public class Student extends Person {
 	}
 
 	public boolean firstapply() { // see appliable Bulletin and apply
-		
+
 		if (Status.first_application_check() == false)
 			return false;
 
@@ -73,7 +73,6 @@ public class Student extends Person {
 		Scanner sc = new Scanner(System.in);
 		Status myStatus = null;
 		
-		
 		try {
 			sc = new Scanner(file);
 		} catch (IOException e) {
@@ -102,16 +101,24 @@ public class Student extends Person {
 				 try {
 					FileWriter fw = new FileWriter("C:\\Users\\TG\\eclipse-workspace\\Software_design\\src\\Person\\StatusDB.txt",true);
 					 fw.write(this.name);
-				} catch (IOException e) {
+
+				// upload status to DB
+				try {
+					FileWriter fw = new FileWriter(
+							"C:\\Users\\TG\\eclipse-workspace\\Software_design\\src\\Person\\StatusDB.txt", true);
+					fw.write(this.name);
+
+				}
+				catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				 
+
 			//	 fw.write(myStatus);
 				 
-				 
-				 
+			// fw.write(myStatus);
 			}
+
 		}
 
 		sc.close();
