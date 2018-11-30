@@ -2,7 +2,7 @@ package Student;
 //학생 package
 import Bulletin.Bulletin;
 class Student{
-	String stu_name;			//학생 이름
+	String stu_name;			//Student name
 	String stu_number;			//학번
 	public Student(String name, String num) {
 		stu_name=name;
