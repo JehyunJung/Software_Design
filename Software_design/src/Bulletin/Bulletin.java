@@ -1,11 +1,11 @@
 package Bulletin;
-// 공고 package
+// Bulletin package
 public class Bulletin{
-	String col_name;			//대학명
-	char req_score;				//요구 성적
-	String country;				//해당 국가
-	String period;				//교환학생 기간
-	String major;				//전공(어떤 전공)
+	String col_name;			//college name
+	char req_score;				//required score
+	String country;				//country
+	String period;				//exchange student period
+	String major;				//exchange student major
 	public Bulletin(String name, char score, String country, String period, String major) {
 		col_name=name;
 		req_score=score;
@@ -16,7 +16,7 @@ public class Bulletin{
 	}
 }
 class Appliable_Bul{
-	
+	dsdsdsd
 	String col_name;			//대학명
 	char req_score;				//요구 성적
 }

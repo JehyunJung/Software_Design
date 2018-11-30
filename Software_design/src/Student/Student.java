@@ -1,15 +1,16 @@
 package Student;
-//학생 package
+//Student package
 import Bulletin.Bulletin;
 class Student{
 	String stu_name;			//Student name
-	String stu_number;			//학번
+	String stu_number;			//Student num
+
 	public Student(String name, String num) {
 		stu_name=name;
 		stu_number=num;
 	}
 	
-	public void see_cur_record() {			//현재 상태 조회
+	public void see_cur_record() {			//search for student's current record
 		
 	}
 	public boolean register_documnet() {	//서류 등록
