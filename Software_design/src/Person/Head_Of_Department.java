@@ -1,16 +1,14 @@
 package Person;
 
 public class Head_Of_Department extends Person{
-	//String dep_name;			//해당 학과 이름
+	//String dep_name;			//Department name
 	
 	
-	public Head_Of_Department(String name, String number) {
+	public Head_Of_Department(String name, String number) { //constructor
 		super(name, number);
 	}
-	public boolean see_transfercredit_applicant() {		//학점 인정자 신청자 조회
-		
+	public boolean handle_transfercredits_apply() {		//handle with tranfer_credits applications
+		return false;	
 	}
-	public boolean approve_major() {		//전공 승인
-		
-	}
+	
 }
