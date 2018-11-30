@@ -3,7 +3,7 @@ package Student;
 import Bulletin.Bulletin;
 class Student{
 	String stu_name;			//Student name
-	String stu_number;			//Student num
+	String stu_number;			//Student number
 
 	public Student(String name, String num) {
 		stu_name=name;
