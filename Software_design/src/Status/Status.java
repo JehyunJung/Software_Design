@@ -53,7 +53,7 @@ public class Status{
 	public Status download() {	// Download status from DB with Student ID
 		
 	}
-	public void print(){		//�쁽�옱 �긽�깭 ?��?��?��
+	public void print(){		// print all
 		System.out.println("Step: " + step);
 		System.out.println("First Stat: " + first_stat);
 		System.out.println("Second Stat: " + final_stat);
