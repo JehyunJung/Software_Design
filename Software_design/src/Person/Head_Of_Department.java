@@ -2,7 +2,7 @@ package Person;
 
 import java.util.Scanner;
 
-import Application.$missing$;
+import Application.*;
 
 public class Head_Of_Department extends Person {
 	// String dep_name; //Department name
@@ -36,6 +36,7 @@ public class Head_Of_Department extends Person {
 		case 2:
 			logout();
 		}
+		return false;
 	}
 
 }
