@@ -1,23 +1,30 @@
 package Status;
+import java.util.List;
+import java.util.LinkedList;
+
 //Student package
 import Bulletin.*;
 import Person.*;
 
 
 public class Status{
-	int step;					//Current application step
+	String name;
+	String number;
+	
+	static int step;			//Current application step
 	int first_stat;				//first application status
 	int final_stat;				//final application status
 	int transfer_stat;			//transfer_credit status
 	Bulletin application;		//application information
-	Course course;				//Course info
-	public Status(int step,	int stat1, int stat2, int stat3, Bulletin application, Course course) {
-		this.step=step;
+	List<Course> course;
+	public Status(String name, String number,int stat1, int stat2, int stat3, Bulletin application,List<Course> course) {
+		this.name = name;
+		this.number =number;
 		first_stat=stat1;
 		final_stat=stat2;
 		transfer_stat=stat3;
 		this.application=application;
-		this.course=course;
+		this.course=course;			//uploading course list to DB required
 	}
 	
 	public boolean see_course() {		//print course info
@@ -30,13 +37,22 @@ public class Status{
 		
 	}
 	public boolean first_application_check() {	//check if the step is in first application step
+		if(step == 1)
+			return true;
 		
+		return false;
 	}	
 	public boolean final_application_check() {	//check if the step is in the final application step
+		if(step == 2)
+			return true;
 		
+		return false;
 	}
 	public boolean transfer_credit_application_check() {	//check if the step is in the transfer application step
-	
+		if(step == 3)
+			return true;
+		
+		return false;
 	}
 	public boolean first_modify() {			// set STEP -> 
 		

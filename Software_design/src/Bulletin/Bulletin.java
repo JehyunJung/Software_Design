@@ -2,11 +2,11 @@ package Bulletin;
 // Bulletin package
 public class Bulletin{
 	String col_name;			//college name
-	char req_score;				//required score
+	String req_score;				//required score
 	String country;				//country
 	String period;				//exchange student period
 	String major;				//exchange student major
-	public Bulletin(String name, char score, String country, String period, String major) {
+	public Bulletin(String name, String score, String country, String period, String major) {
 		col_name=name;
 		req_score=score;
 		this.country=country;
