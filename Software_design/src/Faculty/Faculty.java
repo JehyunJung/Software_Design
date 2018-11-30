@@ -1,5 +1,5 @@
 package Faculty;
-//교직원 package
+// package
 class Manager{		//교직원 class
 	String man_name;	//교직원 이름
 	public Manager(String name) {
