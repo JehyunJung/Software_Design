@@ -11,7 +11,7 @@ class Student{
 	}
 	public void see_cur_record() {			//search for student's current status
 	}
-	public boolean register_documnet() {	//register document
+	public boolean register_document() {	//register document
 		
 	}
 	public boolean apply_transfercredits() {	// apply for transfer credit
