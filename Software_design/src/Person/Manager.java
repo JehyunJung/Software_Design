@@ -11,7 +11,7 @@ public class Manager extends Person { // faculty class
 	}
 
 	public void add_bull() { // post bull
-
+		
 	}
 
 	public void del_bull() { // delete bull

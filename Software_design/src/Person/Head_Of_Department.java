@@ -1,17 +1,26 @@
 package Person;
+import Status.*;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 import Application.*;
 
 public class Head_Of_Department extends Person {
 	// String dep_name; //Department name
+	LinkedList<Status> status=new LinkedList<>();
 
 	public Head_Of_Department(String name, String number) { // constructor
 		super(name, number);
+		//Status.download(status);
 	}
 
 	public boolean handle_transfercredits_apply() { // handle with tranfer_credits applications
+		Iterator<Status> itr=status.iterator();
+		while(itr.hasNext()) {
+			itr.next().see_course();
+		}
 		return false;
 	}
 
