@@ -3,43 +3,51 @@ package Student;
 import Bulletin.Bulletin;
 class Student{
 	String stu_name;			//Student name
-	String stu_number;			//Student number
+
+	String stu_number;			//Student_number
+  String stu_number;			//Student number
+
 
 	public Student(String name, String num) {
 		stu_name=name;
 		stu_number=num;
 	}
 	
+
+	public void see_cur_record() {			//í˜„ì¬ ìƒíƒœ ì¡°íšŒ
+	
+
 	public void see_cur_record() {			//search for student's current record
 		
+
 	}
-	public boolean register_documnet() {	//¼­·ù µî·Ï
+	public boolean register_documnet() {	//ì„œë¥˜ ë“±ë¡
 		
 	}
-	public boolean apply_transfercredit() {	//ÇĞÁ¡ ÀÎÁ¤ ½ÅÃ» 
+	public boolean apply_transfercredit() {	//í•™ì  ì¸ì • ì‹ ì²­ 
 		
 	}
-	public boolean cancel_apply() {			//½ÅÃ» Ãë¼Ò
+	public boolean cancel_apply() {			//ì‹ ì²­ ì·¨ì†Œ
 		
 	}
-	public boolean see_appliable_record() {	//Áö¿ø °¡´ÉÇÑ °ø°í Á¶È¸
+	public boolean see_appliable_record() {	//ì§€ì› ê°€ëŠ¥í•œ ê³µê³  ì¡°íšŒ
 		
 	}
-	public void see_dispatch_record() {		//ÆÄ°ß ½ÌÀû Á¶È¸
+	public void see_dispatch_record() {		//íŒŒê²¬ ì‹±ì  ì¡°íšŒ
 		
 	}
-	public boolean apply_exchangestudent() {	//±³È¯ ÇĞ¼§ Áö¿ø ½ÅÃ»
+	public boolean apply_exchangestudent() {	//êµí™˜ í•™ìƒ¹ ì§€ì› ì‹ ì²­
 		
 	}
 }
 
 class Status{
-	int step;					//½ÅÃ» ´Ü°è		
-	int first_stat;			//1Â÷ »óÅÂ
-	int final_stat;			//ÃÖÁ¾ »óÅÂ
-	int transfer_stat;		//ÇĞÁ¡ ÀÎÁ¤ ½ÅÃ» »óÅÂ
-	Bulletin application;		//Áö¿ø Á¤º¸
-	String course;				//°­ÁÂ¸í
+	int step;					//ì‹ ì²­ ë‹¨ê³„		
+	int first_stat;			//1ì°¨ ìƒíƒœ
+	int final_stat;			//ìµœì¢… ìƒíƒœ
+	int transfer_stat;		//í•™ì  ì¸ì • ì‹ ì²­ ìƒíƒœ
+	Bulletin application;		//ì§€ì› ì •ë³´
+	String course;				//ê°•ì¢Œëª…
 	public Status(int step,	int stat1, int stat2, int stat3, Bulletin application, String course) {
 		this.step=step;
 		first_stat=stat1;
@@ -49,40 +57,40 @@ class Status{
 		this.course=course;
 	}
 	
-	public boolean see_course() {		//°­ÁÂ Á¶È¸
+	public boolean see_course() {		//ê°•ì¢Œ ì¡°íšŒ
 		
 	}	
-	public boolean add_record() {		//½ÇÀû ±â·Ï
+	public boolean add_record() {		//ì‹¤ì  ê¸°ë¡
 		
 	}
-	public void show_info() {			//»óÅÂ Á¤º¸ Ãâ·Â
+	public void show_info() {			//ìƒíƒœ ì •ë³´ ì¶œë ¥
 		
 	}
-	public boolean first_application_check() {	//±â°£ÀÌ 1Â÷°¡ ¸Â´Â Áö È®ÀÎ
+	public boolean first_application_check() {	//ê¸°ê°„ì´ 1ì°¨ê°€ ë§ëŠ” ì§€ í™•ì¸
 		
 	}	
-	public boolean final_application_check() {	//±â°£ÀÌ 1Â÷°¡ ¸Â´Â Áö È®ÀÎ
+	public boolean final_application_check() {	//ê¸°ê°„ì´ 1ì°¨ê°€ ë§ëŠ” ì§€ í™•ì¸
 		
 	}
-	public boolean transfer_credit_application_check() {	//±â°£ÀÌ 1Â÷°¡ ¸Â´Â Áö È®ÀÎ
+	public boolean transfer_credit_application_check() {	//ê¸°ê°„ì´ 1ì°¨ê°€ ë§ëŠ” ì§€ í™•ì¸
 	
 	}
-	public boolean first_modify() {			//ÇĞ»ıÀÇ 1Â÷ Áö¿ø »óÅÂ º¯°æ
+	public boolean first_modify() {			//í•™ìƒì˜ 1ì°¨ ì§€ì› ìƒíƒœ ë³€ê²½
 		
 	}
-	public boolean second_modify() {			//ÇĞ»ıÀÇ ÃÖÁ¾ Áö¿ø »óÅÂ º¯°æ
+	public boolean second_modify() {			//í•™ìƒì˜ ìµœì¢… ì§€ì› ìƒíƒœ ë³€ê²½
 		
 	}
-	public boolean final_modify() {			//ÇĞÁ¡ ÀÎÁ¤ ½ÅÃ» »óÅÂ º¯°æ
+	public boolean final_modify() {			//í•™ì  ì¸ì • ì‹ ì²­ ìƒíƒœ ë³€ê²½
 		
 	}
-	public boolean upload() {	//ÀÎ½ºÅÏ½º¸¦ DB¿¡ ÀúÀå
+	public boolean upload() {	//ì¸ìŠ¤í„´ìŠ¤ë¥¼ DBì— ì €ì¥
 		
 	}
-	public Status download() {	//ÀÎ½ºÅÏ½º¸¦ DB¿¡¼­ °¡Á®¿Â´Ù.
+	public Status download() {	//ì¸ìŠ¤í„´ìŠ¤ë¥¼ DBì—ì„œ ê°€ì ¸ì˜¨ë‹¤.
 		
 	}
-	public void print(){		//ÇöÀç »óÅÂ Ãâ·Â
+	public void print(){		//í˜„ì¬ ìƒíƒœ ì¶œë ¥
 		System.out.println("Step: " + step);
 		System.out.println("First Stat: " + first_stat);
 		System.out.println("Second Stat: " + final_stat);
@@ -93,10 +101,10 @@ class Status{
 	
 }
 class Document{
-	String stu_num;			//ÇĞ»ı ÇĞ¹ø
-	String stu_name;		//ÇĞ»ı ÀÌ¸§
-	String col_name;		//½ÅÃ» ´ëÇĞ¸í
-	String doc_type;		//¼­·ù ºĞ·ù
+	String stu_num;			//í•™ìƒ í•™ë²ˆ
+	String stu_name;		//í•™ìƒ ì´ë¦„
+	String col_name;		//ì‹ ì²­ ëŒ€í•™ëª…
+	String doc_type;		//ì„œë¥˜ ë¶„ë¥˜
 	public Document(String stu_num, String stu_name, String col_name, String doc_type) {
 		this.stu_num=stu_num;
 		this.stu_name=stu_name;
@@ -106,9 +114,9 @@ class Document{
 }
 
 class Major_course{
-	String course_name;		//°­ÁÂ ÀÌ¸§
-	boolean major;			//Àü°ø ¿©ºÎ
-	char score;				//¼ºÀû
+	String course_name;		//ê°•ì¢Œ ì´ë¦„
+	boolean major;			//ì „ê³µ ì—¬ë¶€
+	char score;				//ì„±ì 
 	
 	public Major_course(String name, boolean major, char score) {
 		course_name=name;

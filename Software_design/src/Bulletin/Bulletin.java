@@ -16,7 +16,6 @@ public class Bulletin{
 	}
 }
 class Appliable_Bul{
-	dsdsdsd
 	String col_name;			//대학명
 	char req_score;				//요구 성적
 }
