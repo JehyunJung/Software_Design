@@ -61,7 +61,7 @@ public class Manager extends Person { // faculty class
 				while(itr.hasNext())
 				{
 					Bulletin temp = itr.next();
-					if(a.equals(temp.getName()){
+					if(a.equals(temp.getName())){
 						System.out.println("same bull exist");
 						continue;
 					}
@@ -107,7 +107,7 @@ public class Manager extends Person { // faculty class
 				while(itr.hasNext())
 				{
 					Bulletin temp = itr.next();
-					if(a.equals(temp.getName()){
+					if(a.equals(temp.getName())){
 						System.out.println("delete bull complete");
 						itr.remove();
 					}
@@ -242,7 +242,6 @@ public class Manager extends Person { // faculty class
 
 	public boolean manager_option() {
 		int menu_option;
-		Scanner sc = new Scanner(System.in);
 
 		System.out.println("**********Manager Options**********");
 		System.out.println("1. print Bull\n"+"2. post bull\n" + "3. delete bull\n" + "4. handle_first_apply\n"
