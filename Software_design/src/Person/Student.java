@@ -27,9 +27,6 @@ public class Student extends Person {
 		document.add(myDocument);
 	}
 
-	public boolean apply_transfercredits() { // apply for transfer credit
-		return true;
-	}
 
 	public boolean cancel_apply() { // canceling application
 		return true;
@@ -49,26 +46,14 @@ public class Student extends Person {
 				return false; // Select val. error catch-> do - while until proper val.
 			
 			
-			//apply selected one
-			Status.add_status_to_list(name, number, 0, 0, 0, Bulletin.bulletin.get(select));
+			//apply selected one , set step = 1
+			Status.add_status_to_list(name, number, 1, 0, 0, Bulletin.bulletin.get(select));
 		}
+		
 		return true;
 	}
-
-	public void see_dispatch_record() { // see dispatch record
-		int count = -1;
-		for(Dispatch_Record b : Dispatch_Record.dispatch_record){
-			count++; 
-			System.out.print(count+"\t");
-			b.show_info();		
-		}
-	}
-
-	public boolean finalapply() { // final application
-		return true;
-	}
-
-	public int see_Applicable_bull() {
+	
+	public int see_Applicable_bull() 	{
 		int count = -1;
 		
 		for(Bulletin b : Bulletin.bulletin){
@@ -81,6 +66,36 @@ public class Student extends Person {
 		}
 		return count;
 	}
+
+	
+	public boolean finalapply() { // final application
+		if (Status.final_application_check() == false)
+			return false;
+		
+		for(Status b : Status.status)
+			if(this.number.equals(b.getNumber()))	// my number == b.getnumber , set step -> 2
+				b.second_modify(1);					// after is up to the manager	
+		
+		return true;
+	}
+	
+	
+	public boolean apply_transfercredits() { // apply for transfer credit
+		
+		return true;
+	}
+	
+
+	public void see_dispatch_record() { // see dispatch record
+		int count = -1;
+		for(Dispatch_Record b : Dispatch_Record.dispatch_record){
+			count++; 
+			System.out.print(count+"\t");
+			b.show_info();		
+		}
+	}
+
+
 
 	public boolean student_option() {
 		int menu_option;
