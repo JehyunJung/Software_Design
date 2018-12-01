@@ -1,28 +1,30 @@
 package Person;
 
 import java.util.LinkedList;
-import java.util.List;
-import java.io.File;
-import java.io.IOException;
 import java.util.Scanner;
-import java.io.FileWriter;
-
 import Bulletin.*;
 import Status.*;
 
 public class Student extends Person {
 	String score;
+	LinkedList<Document> document=new LinkedList<>();
 
 	public Student(String name, String number, String score) {
 		super(name, number);
 		this.score = score;
 	}
 
-	public void see_cur_record() { // search for student's current status
+	public void see_cur_status() { // search for student's current status
+
+		for(Status b : Status.status)
+			if(this.number.equals(b.getNumber()))
+				b.show_info();		
+		
 	}
 
-	public boolean register_document() { // register document
-		return true;
+	public void register_document(String col_name,String doc_type) { // register document
+		Document myDocument=new Document(name,number,col_name,doc_type);
+		document.add(myDocument);
 	}
 
 	public boolean apply_transfercredits() { // apply for transfer credit
@@ -33,132 +35,84 @@ public class Student extends Person {
 		return true;
 	}
 
-	public boolean firstapply() { // see appliable Bulletin and apply
+	public boolean firstapply() { // see applicable Bulletin and apply
 
 		if (Status.first_application_check() == false)
 			return false;
 
 		int length, select;
-		length = see_Appliable_bull(); // from 'appliable bulletin : database'
+		length = see_Applicable_bull(); // from 'applicable bulletin : database'
 										// read until EOF, and measure the database length
 		try (Scanner sc = new Scanner(System.in)) {
 			select = sc.nextInt();
 			if (select <= 0 || select > length)
 				return false; // Select val. error catch-> do - while until proper val.
-			firstapply(select);
+			
+			
+			//apply selected one
+			Status.add_status_to_list(name, number, 0, 0, 0, Bulletin.bulletin.get(select));
 		}
 		return true;
 	}
 
 	public void see_dispatch_record() { // see dispatch record
-
+		int count = -1;
+		for(Dispatch_Record b : Dispatch_Record.dispatch_record){
+			count++; 
+			System.out.print(count+"\t");
+			b.show_info();		
+		}
 	}
 
 	public boolean finalapply() { // final application
 		return true;
 	}
 
-	public void firstapply(int select) {
-		int count = 0;
-		String col_name; // college name
-		String req_score; // required score
-		String country; // country
-		String period; // exchange student period
-		String major; // exchange student major
-		File file = new File("bulletins.txt");
-
-		try (Scanner sc = new Scanner(file)) {
-			while (sc.hasNext()) {
-				col_name = sc.next();
-				req_score = sc.next();
-				country = sc.next();
-				period = sc.next();
-				major = sc.next();
-
-				count++;
-
-				if (select == count) // apply this! bulletin
-				{
-					Bulletin apply_info = new Bulletin(col_name, req_score, country, period, major);
-					Status.add_status_to_list(name, number, 0, 0, 0, apply_info);
-					// upload status to DB
-					try {
-						FileWriter fw = new FileWriter(
-								"C:\\Users\\TG\\eclipse-workspace\\Software_design\\src\\Person\\StatusDB.txt", true);
-						fw.write(this.name);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					// fw.write(myStatus);
-				}
-
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public int see_Appliable_bull() {
-		int count = 0;
-		String col_name; // college name
-		String req_score; // required score
-		String country; // country
-		String period; // exchange student period
-		String major; // exchange student major
-		File file = new File("bulletins.txt");
-		Scanner sc = new Scanner(System.in);
-		try {
-			sc = new Scanner(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		while (sc.hasNext()) {
-			col_name = sc.next();
-			req_score = sc.next();
-			country = sc.next();
-			period = sc.next();
-			major = sc.next();
-
-			count++;
-
-			if (score.compareTo(req_score) < 0) {
-				System.out.println(count + col_name + req_score + country + period + major);
-
+	public int see_Applicable_bull() {
+		int count = -1;
+		
+		for(Bulletin b : Bulletin.bulletin){
+			count++; 
+			if (score.compareTo(b.getRequiredScore()) < 0) 
+			{
+				System.out.print(count+"\t");
+				b.show_info();			
 			}
 		}
-
-		sc.close();
 		return count;
 	}
 
 	public boolean student_option() {
 		int menu_option;
-		Scanner sc = new Scanner(System.in);
+		try (Scanner sc = new Scanner(System.in)) {
 
-		System.out.println("**********Student Options**********");
-		System.out.println("1. search for student's current status\n" + "2. print appliable Bulletin and apply\n"
-				+ "3. register document\n" + "4. final application\n" + "5. apply for transfer credit"
-				+ "6. canceling application\n" + "7. see dispatch record" + "8. logout");
-		while (true) {
-			System.out.print("Insert option: ");
-			menu_option = sc.nextInt();
-			if (menu_option >= 1 && menu_option <= 8)
-				break;
-			else
-				System.out.println("Wrong input\n");
+			System.out.println("**********Student Options**********");
+			System.out.println("1. search for student's current status\n" + "2. print appliable Bulletin and apply\n"
+					+ "3. register document\n" + "4. final application\n" + "5. apply for transfer credit"
+					+ "6. canceling application\n" + "7. see dispatch record" + "8. logout");
+			while (true) {
+				System.out.print("Insert option: ");
+				menu_option = sc.nextInt();
+				if (menu_option >= 1 && menu_option <= 8)
+					break;
+				else
+					System.out.println("Wrong input\n");
+			}
 		}
+		
 		switch (menu_option) {
 		case 1:
-			see_cur_record();
+			see_cur_status();
 		case 2:
 			firstapply();
 		case 3:
-			register_document();
+			String col_name;
+			String doc_type;
+			try (Scanner sc = new Scanner(System.in)) {
+				col_name=sc.next();
+				doc_type=sc.next();
+				}
+			register_document(col_name,doc_type);
 		case 4:
 			finalapply();
 		case 5:
@@ -170,6 +124,10 @@ public class Student extends Person {
 		case 8:
 			logout();
 		}
+		
+		
+		//a - mu gu na return
+		return false;
 	}
 
 }
