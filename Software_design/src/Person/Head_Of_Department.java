@@ -3,13 +3,17 @@ import Status.*;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Scanner;
 
 import Application.*;
+import Bulletin.Bulletin;
 
 public class Head_Of_Department extends Person {
 	// String dep_name; //Department name
 	LinkedList<Status> status=new LinkedList<>();
+	Scanner sc = new Scanner(System.in);
+	String a;
 
 	public Head_Of_Department(String name, String number) { // constructor
 		super(name, number);
@@ -17,27 +21,38 @@ public class Head_Of_Department extends Person {
 	}
 
 	public boolean handle_transfercredits_apply() { // handle with tranfer_credits applications
-		Scanner sc = new Scanner(System.in);
-		String tcc;
 		
+		Major_course.download();
+		ListIterator<Major_course> itr=Major_course.Major_course.listiterator();
 		while(true) {
-			//file print course
+			while(itr.hasNext()) {
+				Major_course.show_info(itr.next());
+			}
+			itr=Major_course.Major_course.listiterator();
 			
 			System.out.println("Input transfer credit course");
 			System.out.println("If you want to quit, Input quit");
-			tcc = sc.nextLine();
+			a = sc.nextLine();
 			if(tcc.equals("quit")){
 				System.out.println("'transfer credit course' quit");
+				Major_course.upload();
 				return false;
 			}	
 			else
 			{
-				//course info compare
-				
-				//complete
-				System.out.println("input transfer credit course complete");
-				//fail
-				System.out.println("input transfer credit course not exist");
+				while(itr.hasNext())
+				{
+					itr.next();
+					if(a.equals(itr.name));
+						break;
+				}
+				if(a.equals(itr.name))
+				{
+					System.out.println("input transfer credit course complete");
+					//상태 변경
+				}
+				else
+					System.out.println("input transfer credit course not exist");
 			}
 		}
 	}
