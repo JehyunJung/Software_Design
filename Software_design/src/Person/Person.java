@@ -9,6 +9,6 @@ public class Person{
 		this.number=number;
 	}
 	public static boolean logout() {
-		
+		return false;
 	}
 }
