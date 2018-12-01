@@ -5,14 +5,14 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import java.io.FileWriter;
 
-import Application.$missing$;
+import Application.*;
 import Bulletin.*;
 import Status.*;
 
 public class Student extends Person {
 	String score;
-	Status myStatus;
 
 	public Student(String name, String number, String score) {
 		super(name, number);
@@ -36,7 +36,7 @@ public class Student extends Person {
 
 	public boolean firstapply() { // see appliable Bulletin and apply
 
-		if (myStatus.first_application_check() == false)
+		if (Status.first_application_check() == false)
 			return false;
 
 		int length, select;
@@ -70,6 +70,7 @@ public class Student extends Person {
 		String major; // exchange student major
 		File file = new File("bulletins.txt");
 		Scanner sc = new Scanner(System.in);
+		Status myStatus = null;
 		try {
 			sc = new Scanner(file);
 		} catch (IOException e) {
@@ -90,7 +91,20 @@ public class Student extends Person {
 				Bulletin apply_info = new Bulletin(col_name, req_score, country, period, major);
 				List<Course> course = new LinkedList<>();
 				myStatus = new Status(this.name, this.number, -1, -1, -1, apply_info, course);
+
+				// upload status to DB
+				try {
+					FileWriter fw = new FileWriter(
+							"C:\\Users\\TG\\eclipse-workspace\\Software_design\\src\\Person\\StatusDB.txt", true);
+					fw.write(this.name);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				// fw.write(myStatus);
 			}
+
 		}
 
 		sc.close();
