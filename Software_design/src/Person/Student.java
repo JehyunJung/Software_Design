@@ -3,6 +3,7 @@ package Person;
 import java.util.LinkedList;
 import java.util.List;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.io.FileWriter;
@@ -71,6 +72,7 @@ public class Student extends Person {
 		File file = new File("bulletins.txt");
 		Scanner sc = new Scanner(System.in);
 		Status myStatus = null;
+		
 		try {
 			sc = new Scanner(file);
 		} catch (IOException e) {
@@ -90,19 +92,31 @@ public class Student extends Person {
 			{
 				Bulletin apply_info = new Bulletin(col_name, req_score, country, period, major);
 				List<Course> course = new LinkedList<>();
+				
+				//Create myStatus in 
 				myStatus = new Status(this.name, this.number, -1, -1, -1, apply_info, course);
+				
+				
+				// upload status to DB
+				 try {
+					FileWriter fw = new FileWriter("C:\\Users\\TG\\eclipse-workspace\\Software_design\\src\\Person\\StatusDB.txt",true);
+					 fw.write(this.name);
 
 				// upload status to DB
 				try {
 					FileWriter fw = new FileWriter(
 							"C:\\Users\\TG\\eclipse-workspace\\Software_design\\src\\Person\\StatusDB.txt", true);
 					fw.write(this.name);
-				} catch (IOException e) {
+
+				}
+				catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
-				// fw.write(myStatus);
+			//	 fw.write(myStatus);
+				 
+			// fw.write(myStatus);
 			}
 
 		}

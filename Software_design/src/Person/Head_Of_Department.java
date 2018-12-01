@@ -17,11 +17,29 @@ public class Head_Of_Department extends Person {
 	}
 
 	public boolean handle_transfercredits_apply() { // handle with tranfer_credits applications
-		Iterator<Status> itr=status.iterator();
-		while(itr.hasNext()) {
-			itr.next().see_course();
+		Scanner sc = new Scanner(System.in);
+		String tcc;
+		
+		while(true) {
+			//file print course
+			
+			System.out.println("Input transfer credit course");
+			System.out.println("If you want to quit, Input quit");
+			tcc = sc.nextLine();
+			if(tcc.equals("quit")){
+				System.out.println("'transfer credit course' quit");
+				return false;
+			}	
+			else
+			{
+				//course info compare
+				
+				//complete
+				System.out.println("input transfer credit course complete");
+				//fail
+				System.out.println("input transfer credit course not exist");
+			}
 		}
-		return false;
 	}
 
 	public boolean head_option() {

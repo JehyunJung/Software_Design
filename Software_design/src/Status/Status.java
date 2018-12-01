@@ -25,6 +25,7 @@ public class Status{
 		transfer_stat=stat3;
 		this.application=application;
 		this.course=course;			//uploading course list to DB required
+		
 	}
 	
 	public boolean see_course() {		//print course info
@@ -36,19 +37,19 @@ public class Status{
 	public void show_info() {			//print status
 		
 	}
-	public boolean first_application_check() {	//check if the step is in first application step
+	public static boolean first_application_check() {	//check if the step is in first application step
 		if(step == 1)
 			return true;
 		
 		return false;
 	}	
-	public boolean final_application_check() {	//check if the step is in the final application step
+	public static boolean final_application_check() {	//check if the step is in the final application step
 		if(step == 2)
 			return true;
 		
 		return false;
 	}
-	public boolean transfer_credit_application_check() {	//check if the step is in the transfer application step
+	public static boolean transfer_credit_application_check() {	//check if the step is in the transfer application step
 		if(step == 3)
 			return true;
 		
