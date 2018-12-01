@@ -35,7 +35,7 @@ public class Status {
 		transfer_stat = stat3;
 		this.application = application;
 	}
-		
+	
 	public String getName()	{
 		return this.name;
 	}
@@ -52,6 +52,9 @@ public class Status {
 		return this.transfer_stat;
 	}
 
+	public String getApplication() {
+		return this.application.getName();
+	}
 	
 	
 	public void see_course() { // print course info 
