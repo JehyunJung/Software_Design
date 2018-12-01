@@ -23,7 +23,7 @@ public class Status {
 	int transfer_stat; // transfer_credit status
 	Bulletin application; // application information
 	List<Course> course;
-	static LinkedList<Status> status = new LinkedList<>();
+	public static LinkedList<Status> status = new LinkedList<>();
 
 	public Status(String name, String number, int stat1, int stat2, int stat3, Bulletin application) {
 		this.name = name;
@@ -33,16 +33,24 @@ public class Status {
 		transfer_stat = stat3;
 		this.application = application;
 	}
-
+	
+	public String getNumber()
+	{
+		return this.number;
+	}
+	
 	public void see_course() { // print course info 
 		//it is available to see the courses when the step is 3;
 		if (step == 3) {
-			int i = 0;
-			Iterator<Status> itr = status.iterator();
-			while (itr.hasNext())
-				System.out.println("course " + ++i + ": " + itr.next());
-
-		} else			//when the step is not in 3 , seeing courses is not available
+			int count = -1;
+			System.out.println("**********Course info***********");
+			for(Status b : Status.status)
+			{
+				System.out.print( ++count + ": ");
+				b.show_info();
+			}
+		} 
+		else			//when the step is not in 3 , seeing courses is not available
 			System.out.println("Not allowed to see courses\n" + "Check if the step is right");
 
 	}
@@ -56,10 +64,11 @@ public class Status {
 	}
 
 	public void show_info() { // print status
-		System.out.println("Step: " + Status.step);
-		System.out.println("First Stat: " + first_stat);
-		System.out.println("Second Stat: " + final_stat);
-		System.out.println("Transfer Stat: " + transfer_stat);
+		System.out.print("Step: " + Status.step);
+		System.out.print("\tFirst Stat: " + first_stat);
+		System.out.print("\tSecond Stat: " + final_stat);
+		System.out.println("\tTransfer Stat: " + transfer_stat);
+		
 		see_course();
 	}
 
@@ -93,7 +102,7 @@ public class Status {
 	 * 
 	 * }
 	 */
-	public void upload() { // Upload status data to DB
+	public static void upload() { // Upload status data to DB
 		Iterator<Status> itr=status.iterator();
 		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("Status.bin"))) {
 			//first status data is used to represent the step
@@ -107,7 +116,7 @@ public class Status {
 		}
 	}
 
-	public void download() { // Download status from DB with Student ID
+	public static void download() { // Download status from DB with Student ID
 		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Status.bin"))) {
 			//first status data is used to represent the step
 			Status.step = ((Status) oi.readObject()).first_stat;

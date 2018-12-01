@@ -1,6 +1,6 @@
 package Status;
 
-class Document{
+public class Document{
 	String stu_num;			// student ID num
 	String stu_name;		// student name
 	String col_name;		// college name
@@ -11,4 +11,5 @@ class Document{
 		this.col_name=col_name;
 		this.doc_type=doc_type;
 	}
+	
 }
