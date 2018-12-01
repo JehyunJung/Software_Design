@@ -11,7 +11,7 @@ import Bulletin.Bulletin;
 
 public class Head_Of_Department extends Person {
 	// String dep_name; //Department name
-	LinkedList<Status> status=new LinkedList<>();
+	LinkedList<Course> status=new LinkedList<>();
 	Scanner sc = new Scanner(System.in);
 	String a;
 
@@ -21,45 +21,43 @@ public class Head_Of_Department extends Person {
 	}
 
 	public boolean handle_transfercredits_apply() { // handle with tranfer_credits applications
-		
-		Major_course.download();
-		ListIterator<Major_course> itr=Major_course.Major_course.listiterator();
+		Status.download();
+		ListIterator<Course> itr=Course.course.listIterator();
 		while(true) {
 			while(itr.hasNext()) {
-				Major_course.show_info(itr.next());
+				itr.next().show_info();
 			}
-			itr=Major_course.Major_course.listiterator();
+			itr=Course.course.listiterator();
 			
 			System.out.println("Input transfer credit course");
 			System.out.println("If you want to quit, Input quit");
 			a = sc.nextLine();
-			if(tcc.equals("quit")){
+			if(a.equals("quit")){
 				System.out.println("'transfer credit course' quit");
-				Major_course.upload();
+				Course.upload();
 				return false;
 			}	
 			else
 			{
 				while(itr.hasNext())
 				{
-					itr.next();
-					if(a.equals(itr.name));
-						break;
+					Course temp = itr.next();
+					if(a.equals(temp.getName())) {
+						System.out.println("input transfer credit course complete");
+						Course temp1 = new Course(temp.getName(),true);
+						itr.remove();
+						itr.add(temp1);	
+					}
+					else
+						System.out.println("input transfer credit course not exist");
 				}
-				if(a.equals(itr.name))
-				{
-					System.out.println("input transfer credit course complete");
-					//상태 변경
-				}
-				else
-					System.out.println("input transfer credit course not exist");
+				
 			}
 		}
 	}
 
 	public boolean head_option() {
 		int menu_option;
-		Scanner sc = new Scanner(System.in);
 
 		System.out.println("**********Head Of Department Options**********");
 		System.out.println("1. handle with tranfer_credits applications\n" + "2. logout");
