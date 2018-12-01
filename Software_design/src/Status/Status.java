@@ -12,6 +12,8 @@ import java.util.LinkedList;
 //Student package
 import Bulletin.*;
 
+
+
 public class Status {
 	String name;
 	String number;
@@ -33,11 +35,24 @@ public class Status {
 		transfer_stat = stat3;
 		this.application = application;
 	}
-	
-	public String getNumber()
-	{
+		
+	public String getName()	{
+		return this.name;
+	}
+	public String getNumber(){
 		return this.number;
 	}
+	public int getStat1(){
+		return this.first_stat;
+	}
+	public int getStat2(){
+		return this.final_stat;
+	}
+	public int getStat3(){
+		return this.transfer_stat;
+	}
+
+	
 	
 	public void see_course() { // print course info 
 		//it is available to see the courses when the step is 3;
@@ -90,18 +105,22 @@ public class Status {
 		return false;
 	}
 
-	/*
-	 * public boolean first_modify() { // set STEP ->
-	 * 
-	 * 
-	 * } public boolean second_modify() { // set STEP ->
-	 * 
-	 * 
-	 * } public boolean final_modify() { // set STEP ->
-	 * 
-	 * 
-	 * }
-	 */
+	
+	 public boolean first_modify(int i) { // set STEP -> 1
+		 
+		 this.first_stat = i;
+		 return true;	  
+	 } 
+	 public boolean second_modify(int i) { // set STEP -> 2
+		 
+		 this.final_stat = i; // "sim-sa-jung"
+		 return true;	  
+	  } 
+	 public boolean final_modify(int i) { // set STEP ->
+		 this.transfer_stat = i;
+		 return true;
+	  }
+	 
 	public static void upload() { // Upload status data to DB
 		Iterator<Status> itr=status.iterator();
 		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("Status.bin"))) {

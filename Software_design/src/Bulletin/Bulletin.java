@@ -10,13 +10,15 @@ import java.util.LinkedList;
 
 // Bulletin package
 public class Bulletin{
+	String bull_name;			//bulletin name
 	String col_name;			//college name
-	String req_score;				//required score
+	String req_score;			//required score
 	String country;				//country
 	String period;				//exchange student period
 	String major;				//exchange student major
 	public static LinkedList<Bulletin> bulletin=new LinkedList<>();	//static linkedlist of Bulletin
-	public Bulletin(String col_name, String req_score, String country, String period, String major) {
+	public Bulletin(String bull_name,String col_name, String req_score, String country, String period, String major) {
+		this.bull_name=bull_name;
 		this.col_name=col_name;
 		this.req_score=req_score;
 		this.country=country;
@@ -29,11 +31,15 @@ public class Bulletin{
 		return this.req_score;
 	}
 	
+	public String getName() {
+		return this.bull_name;
+	}
+	
 	
 	// add bulletin to list;
-	public static void add_bulletin_to_list(String name, String score, String country, String period, String major){
+	public static void add_bulletin_to_list(String bull_name,String col_name, String score, String country, String period, String major){
 		//create Bulletin and insert to list;
-		Bulletin myBulletin = new Bulletin(name, score,country,period,major);
+		Bulletin myBulletin = new Bulletin(bull_name,col_name, score,country,period,major);
 		bulletin.add(myBulletin);
 	}
 	
@@ -68,6 +74,7 @@ public class Bulletin{
 	
 	
 	public void show_info() {
+		System.out.print("Bull_name: " + bull_name);		//print the name of bulletin board;
 		System.out.print("College_name: " + col_name);		//print the name of exchange school
 		System.out.print("\tCountry: " + country);			//print the country of exchange school
 		System.out.print("\tPeriod: " + period );			//print the period of exchange school
