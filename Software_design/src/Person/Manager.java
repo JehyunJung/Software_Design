@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Scanner;
 
-import Bulletin.Bulletin;
+import Bulletin.*;
 import Status.*;
 //import Application.missing;
 
@@ -17,12 +17,12 @@ public class Manager extends Person { // faculty class
 
 	public boolean print_bull(){ // print bull
 		Bulletin.download();
-		Listiterator<Bulletin> itr=Bulletin.bulletin.listiterator();
+		ListIterator<Bulletin> itr=Bulletin.bulletin.listIterator();
 		while(true) {
 		
 			//print bull
 			while(itr.hasNext()) {
-				bulletin.show_info(itr.next());
+				itr.next().show_info();
 			}
 			
 			System.out.println("If you want to quit, Input quit");
@@ -39,13 +39,13 @@ public class Manager extends Person { // faculty class
 	}
 	public boolean add_bull() { // post bull
 		Bulletin.download();
-		Listiterator<Bulletin> itr=Bulletin.bulletin.listiterator();
+		ListIterator<Bulletin> itr=Bulletin.bulletin.listIterator();
 		while(true) {
 			//print bull
 			while(itr.hasNext()) {
-				bulletin.show_info(itr.next());
+				itr.next().show_info();
 			}
-			itr=Bulletin.bulletin.listiterator();
+			itr=Bulletin.bulletin.listIterator();
 			
 			System.out.println("Don't input space in the one info member");
 			System.out.println("1. Input add bull name : ");
@@ -60,17 +60,15 @@ public class Manager extends Person { // faculty class
 			{
 				while(itr.hasNext())
 				{
-					itr.next();
-					if(a.equals(itr.bul_name));
-					break;
+					Bulletin temp = itr.next();
+					if(a.equals(temp.getName()){
+						System.out.println("same bull exist");
+						continue;
+					}
+					else
+						System.out.println("same bull not exist");
 				}
-				if(a.equals(itr.bul_name))
-				{
-					System.out.println("same bull exist");
-					continue;
-				}
-				else
-					System.out.println("same bull not exist");
+				
 			}
 			System.out.println("2. Input add country : ");
 			b = sc.nextLine();
@@ -89,12 +87,12 @@ public class Manager extends Person { // faculty class
 
 	public boolean del_bull() { // delete bull
 		Bulletin.download();
-		Listiterator<Bulletin> itr=Bulletin.bulletin.listiterator();
+		ListIterator<Bulletin> itr=Bulletin.bulletin.listIterator();
 		while(true) {
 			while(itr.hasNext()) {
-				bulletin.show_info(itr.next());
+				itr.next().show_info();
 			}
-			itr=Bulletin.bulletin.listiterator();
+			itr=Bulletin.bulletin.listIterator();
 			
 			System.out.println("Input delete bull name");
 			System.out.println("If you want to quit, Input quit");
@@ -108,141 +106,127 @@ public class Manager extends Person { // faculty class
 			{
 				while(itr.hasNext())
 				{
-					itr.next();
-					if(a.equals(itr.bul_name));
-						break;
+					Bulletin temp = itr.next();
+					if(a.equals(temp.getName()){
+						System.out.println("delete bull complete");
+						itr.remove();
+					}
+					else
+						System.out.println("input bull not exist");
 				}
-				if(a.equals(itr.bul_name))
-				{
-					System.out.println("delete bull complete");
-					itr.remove();	
-				}
-				else
-					System.out.println("input bull not exist");
 			}
 		}
 	}
 
 	public boolean handle_first_apply() { // record first result
 		Bulletin.download();
-		ListIterator<Bulletin> itr=Bulletin.bulletin.listiterator();
+		ListIterator<Status> itr=Status.status.listIterator();
 		while(true) {
 			while(itr.hasNext()) {
-				bulletin.show_info(itr.next());
+				itr.next().show_info();
 			}
-			itr=Bulletin.bulletin.listiterator();
+			itr=Status.status.listIterator();
 			
 			System.out.println("Input first apply pass student number");
 			System.out.println("If you want to quit, Input quit");
 			a = sc.nextLine();
 			if(a.equals("quit")){
 				System.out.println("'handle_first_apply' quit");
-				Bulletin.upload();
+				Status.upload();
 				return false;
 			}
 			else
 			{
 				while(itr.hasNext())
 				{
-					itr.next();
-					if(a.equals(itr.number));
-						break;
+					Status temp = itr.next();
+					if(a.equals(temp.getNumber())){
+						System.out.println(a+"is passed first apply");
+						Status temp1 = new Status(temp.getName(),temp.getNumber(),2,temp.getStat2(),temp.getStat3(),temp.getApplication());
+						itr.remove();
+						itr.add(temp1);	
+					}
+					else
+						System.out.println("input student number not exist");
 				}
-				if(a.equals(itr.number))
-				{
-					System.out.println(a+"is passed first apply");
-					//상태 변경
-					Status temp = new Status(itr.name,itr.number,2,itr.stat2,itr.stat3,itr.application);
-					itr.remove();
-					itr.add(temp);	
-				}
-				else
-					System.out.println("input student number not exist");
 			}
 		}
 	}
 
 	public boolean handle_final_apply() { // record final result
 		Bulletin.download();
-		ListIterator<Bulletin> itr=Bulletin.bulletin.listiterator();
+		ListIterator<Status> itr=Status.status.listIterator();
 		while(true) {
 			while(itr.hasNext()) {
-				bulletin.show_info(itr.next());
+				itr.next().show_info();
 			}
-			itr=Bulletin.bulletin.listiterator();
+			itr=Status.status.listIterator();
 			System.out.println("Input final apply pass student number");
 			System.out.println("If you want to quit, Input quit");
 			a = sc.nextLine();
 			if(a.equals("quit")){
 				System.out.println("'handle_final_apply' quit");
-				Bulletin.upload();
+				Status.upload();
 				return false;
 			}	
 			else
 			{
 				while(itr.hasNext())
 				{
-					itr.next();
-					if(a.equals(itr.number));
-						break;
+					Status temp = itr.next();
+					if(a.equals(temp.getNumber())){
+						System.out.println(a+"is passed final apply");
+						Status temp1 = new Status(temp.getName(),temp.getNumber(),temp.getStat1(),2,temp.getStat3(),temp.getApplication());
+						itr.remove();
+						itr.add(temp1);	
+					}
+					else
+						System.out.println("input student number not exist");
 				}
-				if(a.equals(itr.number))
-				{
-					System.out.println(a+"is passed final apply");
-					//상태 변경
-					Status temp = new Status(itr.name,itr.number,itr_stat1,2,itr.stat3,itr.application);
-					itr.remove();
-					itr.add(temp);	
-				}
-				else
-					System.out.println("input student number not exist");
 			}
 		}
 	}
 
 	public boolean handle_transfercredit_apply() { // record transfer_credit
 		Bulletin.download();
-		ListIterator<Bulletin> itr=Bulletin.bulletin.listiterator();
+		ListIterator<Status> itr=Status.status.listIterator();
 
 		while(true) {
 			while(itr.hasNext()) {
-				bulletin.show_info(itr.next());
+				itr.next().show_info();
 			}
-			itr=Bulletin.bulletin.listiterator();
+			itr=Status.status.listIterator();
 			System.out.println("Input transfercredit apply pass student number");
 			System.out.println("If you want to quit, Input quit");
 			a = sc.nextLine();
 			if(a.equals("quit")){
 				System.out.println("'handle_transfercredit_apply' quit");
-				Bulletin.upload();
+				Status.upload();
 				return false;
 			}	
 			else
 			{
 				while(itr.hasNext())
 				{
-					itr.next();
-					if(a.equals(itr.number));
-						break;
+					Status temp = itr.next();
+					if(a.equals(temp.getNumber())){
+						System.out.println(a+"is passed transfercredit apply");
+						Status temp1 = new Status(temp.getName(),temp.getNumber(),temp.getStat1(),temp.getStat2(),2,temp.getApplication());
+						itr.remove();
+						itr.add(temp1);	
+					}
+					else
+						System.out.println("input student number not exist");
 				}
-				if(a.equals(itr.number))
-				{
-					System.out.println(a+"is passed transfercredit apply");
-					Status temp = new Status(itr.name,itr.number,itr_stat1,itr.stat2,2,itr.application);
-					itr.remove();
-					itr.add(temp);	
-				}
-				else
-					System.out.println("input student number not exist");
 			}
 		}
 	}
 
 	public boolean see_dispatch_rec() { // see dispatch record
-		Bulletin.download();
-		Listiterator<Bulletin> itr=Bulletin.dispatch.listiterator();
+		Dispatch_Record.download();
+		ListIterator<Dispatch_Record> itr= Dispatch_Record.dispatch_record.listIterator();
 		while(itr.hasNext()) {
-				dispatch.show_info(itr.next());
+			itr.next().show_info();
 		}
 		while(true) {
 			System.out.println("If you want to quit, Input quit");
