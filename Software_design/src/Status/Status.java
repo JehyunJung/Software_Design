@@ -1,11 +1,14 @@
 package Status;
 
 import java.util.List;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -123,7 +126,6 @@ public class Status {
 		 this.transfer_stat = i;
 		 return true;
 	  }
-	 
 	public static void upload() { // Upload status data to DB
 		Iterator<Status> itr=status.iterator();
 		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("Status.bin"))) {
@@ -153,6 +155,31 @@ public class Status {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void makeCourses() {
+		int count=0,index=0;
+		int i=0;
+		SecureRandom sr=new SecureRandom();
+		LinkedList<String> string=new LinkedList<>();
+		try(BufferedReader fr=new BufferedReader(new FileReader("Courses.txt"))){
+			while(true) {
+			if(fr.readLine()==null)
+				break;
+			count++;
+			string.add(fr.readLine());
+			}
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		for(i=0;i<6;i++) {
+			index=sr.nextInt()%count;
+			course.add(new Course(string.get(index)));
+		}
+		
+		
 	}
 
 }

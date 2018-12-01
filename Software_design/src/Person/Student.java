@@ -81,8 +81,16 @@ public class Student extends Person {
 	
 	
 	public boolean apply_transfercredits() { // apply for transfer credit
+		if (Status.transfer_credit_application_check() == false)
+			return false;
+		
+		for(Status b : Status.status)
+			if(this.number.equals(b.getNumber()))	// my number == b.getnumber , set step -> 2
+				b.second_modify(1);					// after is up to the manager	
 		
 		return true;
+	}
+	
 	}
 	
 
