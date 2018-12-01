@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.io.FileWriter;
 
-import Application.*;
 import Bulletin.*;
 import Status.*;
 
@@ -42,14 +41,12 @@ public class Student extends Person {
 		int length, select;
 		length = see_Appliable_bull(); // from 'appliable bulletin : database'
 										// read until EOF, and measure the database length
-		Scanner sc = new Scanner(System.in);
-		select = sc.nextInt();
-
-		if (select <= 0 || select > length)
-			return false; // Select val. error catch-> do - while until proper val.
-
-		firstapply(select);
-
+		try (Scanner sc = new Scanner(System.in)) {
+			select = sc.nextInt();
+			if (select <= 0 || select > length)
+				return false; // Select val. error catch-> do - while until proper val.
+			firstapply(select);
+		}
 		return true;
 	}
 
@@ -69,45 +66,40 @@ public class Student extends Person {
 		String period; // exchange student period
 		String major; // exchange student major
 		File file = new File("bulletins.txt");
-		Scanner sc = new Scanner(System.in);
-		Status myStatus = null;
-		try {
-			sc = new Scanner(file);
+
+		try (Scanner sc = new Scanner(file)) {
+			while (sc.hasNext()) {
+				col_name = sc.next();
+				req_score = sc.next();
+				country = sc.next();
+				period = sc.next();
+				major = sc.next();
+
+				count++;
+
+				if (select == count) // apply this! bulletin
+				{
+					Bulletin apply_info = new Bulletin(col_name, req_score, country, period, major);
+					Status.add_status_to_list(name, number, 0, 0, 0, apply_info);
+					// upload status to DB
+					try {
+						FileWriter fw = new FileWriter(
+								"C:\\Users\\TG\\eclipse-workspace\\Software_design\\src\\Person\\StatusDB.txt", true);
+						fw.write(this.name);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					// fw.write(myStatus);
+				}
+
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		while (sc.hasNext()) {
-			col_name = sc.next();
-			req_score = sc.next();
-			country = sc.next();
-			period = sc.next();
-			major = sc.next();
-
-			count++;
-
-			if (select == count) // apply this! bulletin
-			{
-				Bulletin apply_info = new Bulletin(col_name, req_score, country, period, major);
-				List<Course> course = new LinkedList<>();
-				myStatus = new Status(this.name, this.number, -1, -1, -1, apply_info, course);
-
-				// upload status to DB
-				try {
-					FileWriter fw = new FileWriter(
-							"C:\\Users\\TG\\eclipse-workspace\\Software_design\\src\\Person\\StatusDB.txt", true);
-					fw.write(this.name);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				// fw.write(myStatus);
-			}
-
-		}
-
-		sc.close();
 	}
 
 	public int see_Appliable_bull() {

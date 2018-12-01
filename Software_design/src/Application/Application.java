@@ -13,12 +13,12 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 
 class Information_class {
-	String ID;
-	String PW;
-	int type;
-	String name;
-	String num;
-	String score;
+	 String ID;
+	 String PW;
+	 int type;
+	 String name;
+	 String num;
+	 String score;
 }
 
 public class Application {
@@ -32,9 +32,6 @@ public class Application {
 	}
 
 	public static boolean login() {
-		Student student;
-		Manager manager;
-		Head_Of_Department head;
 		String ID, PW;
 		Information_class info;
 		Scanner sc = new Scanner(System.in);
@@ -65,13 +62,13 @@ public class Application {
 							System.out.println("Login successed");
 							switch (info.type) {
 							case 0:
-								student = new Student(info.name, info.num, info.score);
+								Student student = new Student(info.name, info.num, info.score);
 								break;
 							case 1:
-								manager = new Manager(info.name, info.num);
+								Manager manager = new Manager(info.name, info.num);
 								break;
 							case 2:
-								head = new Head_Of_Department(info.name, info.num);
+								Head_Of_Department head = new Head_Of_Department(info.name, info.num);
 								break;
 							}
 							sc.close();
