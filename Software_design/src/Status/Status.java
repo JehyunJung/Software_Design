@@ -52,8 +52,8 @@ public class Status {
 		return this.transfer_stat;
 	}
 
-	public String getApplication() {
-		return this.application.getName();
+	public Bulletin getApplication() {		//getter of Bulletin
+		return this.application;
 	}
 	
 	
