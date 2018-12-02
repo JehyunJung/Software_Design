@@ -156,6 +156,7 @@ public class Manager extends Person { // faculty class
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_first_apply' quit");
 					Status.upload();
+					Status.step = 2;
 					return true;
 				}
 				
@@ -198,6 +199,7 @@ public class Manager extends Person { // faculty class
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_final_apply' quit");
 					Status.upload();
+					Status.step = 3;
 					return true;
 				}
 				for (Status s : Status.status) {
@@ -239,6 +241,7 @@ public class Manager extends Person { // faculty class
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_transfercredit_apply' quit");
 					Status.upload();
+					Status.step = 5;
 					return true;
 				}
 				for (Status s : Status.status) {

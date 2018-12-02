@@ -35,20 +35,19 @@ public class Application {
 		String ID, PW;
 		Information_class info;
 		Scanner sc = new Scanner(System.in);
-		String quitOption;
 
 		while (true) {
 			System.out.println("If you want to quit login insert 'quit'");
-			quitOption = sc.nextLine();
-			if (quitOption.equals("quit"))
-				return false;
-
 			System.out.println("Input ID : ");
 			ID = sc.nextLine();
-
+			if (ID.equals("quit"))
+				return false;
+			
 			System.out.println("Input PW : ");
 			PW = sc.nextLine();
-
+			if (PW.equals("quit"))
+				return false;
+			
 			try (ObjectInputStream oi = new ObjectInputStream(
 					new BufferedInputStream(new FileInputStream("information.txt")))) {
 				info = (Information_class) oi.readObject();
@@ -63,26 +62,32 @@ public class Application {
 							switch (info.type) {
 							case 0:
 								Student student = new Student(info.name, info.num, info.score);
+								student.student_option();
 								break;
 							case 1:
 								Manager manager = new Manager(info.name, info.num);
+								manager.manager_option();
 								break;
 							case 2:
 								Head_Of_Department head = new Head_Of_Department(info.name, info.num);
+								head.head_option();
 								break;
 							}
 							sc.close();
 							return true;
 						} else {
 							System.out.println("Password is wrong\n");
-							continue;
+							break;
 						}
 					}
+					else {
+						System.out.println("ID doesn't exists");
+						sc.close();
+						break;
+					}
 				}
-				System.out.println("ID doesn't exists");
-				sc.close();
-				continue;
-			} catch (IOException | ClassNotFoundException e) {
+			} 
+			catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
