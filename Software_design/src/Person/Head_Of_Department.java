@@ -11,7 +11,6 @@ import Bulletin.Bulletin;
 
 public class Head_Of_Department extends Person {
 	// String dep_name; //Department name
-	LinkedList<Course> status=new LinkedList<>();
 
 	public Head_Of_Department(String name, String number) { // constructor
 		super(name, number);
