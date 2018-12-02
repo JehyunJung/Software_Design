@@ -8,13 +8,17 @@ import Status.*;
 public class Student extends Person {
 	String score;
 	LinkedList<Document> document=new LinkedList<>();
-
+	
+	public String getNumber() {
+		return this.number;
+	}
 	public Student(String name, String number, String score) {
 		super(name, number);
 		this.score = score;
 	}
 
 	public void see_cur_status() { // search for student's current status
+		Status.download();
 
 		for(Status b : Status.status)
 			if(this.number.equals(b.getNumber()))
@@ -22,9 +26,28 @@ public class Student extends Person {
 		
 	}
 
-	public void register_document(String col_name,String doc_type) { // register document
-		Document myDocument=new Document(name,number,col_name,doc_type);
-		document.add(myDocument);
+	public void register_document() { // register document
+		String col_name=null;
+		String doc_type;
+		Status.download();
+		
+		for(Status s: Status.status)
+			if(number.equals(s.getNumber())) {
+				col_name=s.getApplication().get_coll_name();
+				break;
+			}
+		
+		try (Scanner sc = new Scanner(System.in)) {
+			System.out.println("Please input the type of document\n" + "otherwise input quit to Quit");
+			doc_type=sc.nextLine();
+			
+			if(doc_type.equals("quit")){
+				Status.upload();
+				return;
+			}
+			document.add(new Document(name,number,col_name,doc_type));
+		}
+		Status.upload();
 	}
 
 
@@ -33,23 +56,31 @@ public class Student extends Person {
 	}
 
 	public boolean firstapply() { // see applicable Bulletin and apply
-
+		int length, select;
+		String quitOption;
+		Status.download();
 		if (Status.first_application_check() == false)
 			return false;
 
-		int length, select;
-		length = see_Applicable_bull(); // from 'applicable bulletin : database'
-										// read until EOF, and measure the database length
 		try (Scanner sc = new Scanner(System.in)) {
+
+			System.out.println("Input quit to Quit");
+			quitOption = sc.nextLine();
+			if (quitOption.equals("quit")) {
+				Status.upload();
+				return true;
+			}
+
+			length = see_Applicable_bull(); // from 'applicable bulletin : database'
+			// read until EOF, and measure the database length
 			select = sc.nextInt();
 			if (select <= 0 || select > length)
 				return false; // Select val. error catch-> do - while until proper val.
-			
-			
-			//apply selected one , set step = 1
+
+			// apply selected one , set step = 1
 			Status.add_status_to_list(name, number, 1, 0, 0, Bulletin.bulletin.get(select));
 		}
-		
+		Status.upload();
 		return true;
 	}
 	
@@ -69,33 +100,53 @@ public class Student extends Person {
 
 	
 	public boolean finalapply() { // final application
+		String quitOption;
+		Status.download();
 		if (Status.final_application_check() == false)
 			return false;
-		
+		try(Scanner sc=new Scanner(System.in)){
+			System.out.println("Input quit to Quit");
+			quitOption=sc.nextLine();
+			if(quitOption.equals("quit")) {
+				Status.upload();
+				return true;
+			}
+		}
 		for(Status b : Status.status)
 			if(this.number.equals(b.getNumber()))	// my number == b.getnumber , set step -> 2
 				b.second_modify(1);					// after is up to the manager	
-		
+		Status.upload();
 		return true;
 	}
 	
 	
 	public boolean apply_transfercredits() { // apply for transfer credit
+		String quitOption;
+		Status.download();
 		if (Status.transfer_credit_application_check() == false)
 			return false;
+		try(Scanner sc=new Scanner(System.in)){
+			System.out.println("Input quit to Quit");
+			quitOption=sc.nextLine();
+			if(quitOption.equals("quit")) {
+				Status.upload();
+				return true;
+			}
+		}
 		
 		for(Status b : Status.status)
 			if(this.number.equals(b.getNumber()))	// my number == b.getnumber , set step -> 2
-				b.second_modify(1);					// after is up to the manager	
-		
+				b.final_modify(1);					// after is up to the manager	
+		Status.upload();
 		return true;
-	}
 	
 	}
 	
 
 	public void see_dispatch_record() { // see dispatch record
 		int count = -1;
+		Dispatch_Record.download();
+		Dispatch_Record.sort_flag=false;
 		for(Dispatch_Record b : Dispatch_Record.dispatch_record){
 			count++; 
 			System.out.print(count+"\t");
@@ -129,13 +180,7 @@ public class Student extends Person {
 		case 2:
 			firstapply();
 		case 3:
-			String col_name;
-			String doc_type;
-			try (Scanner sc = new Scanner(System.in)) {
-				col_name=sc.next();
-				doc_type=sc.next();
-				}
-			register_document(col_name,doc_type);
+			register_document();
 		case 4:
 			finalapply();
 		case 5:

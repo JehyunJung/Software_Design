@@ -27,6 +27,9 @@ public class Course {
 		this.major=false;
 		
 	}
+	public String getName() {
+		return Course_name;
+	}
 	public boolean get_major_stat() {
 		return this.major_stat;
 	}
@@ -42,5 +45,8 @@ public class Course {
 	public void set_major_stat(boolean b) {
 		major_stat = b;
 	}
-
+	public void see_applied_course() {
+		if(this.major_stat)
+			System.out.println("Course_name");
+	}
 }

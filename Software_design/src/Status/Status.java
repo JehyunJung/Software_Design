@@ -18,8 +18,8 @@ import Bulletin.*;
 
 
 public class Status {
-	String name;
-	String number;
+	String stu_name;
+	String stu_num;
 
 	static int step; // Current application step
 
@@ -27,23 +27,26 @@ public class Status {
 	int final_stat; // final application status
 	int transfer_stat; // transfer_credit status
 	Bulletin application; // application information
-	List<Course> course;
+	LinkedList<Course> course;
 	public static LinkedList<Status> status = new LinkedList<>();
 
 	public Status(String name, String number, int stat1, int stat2, int stat3, Bulletin application) {
-		this.name = name;
-		this.number = number;
+		this.stu_name = name;
+		this.stu_num = number;
 		first_stat = stat1;
 		final_stat = stat2;
 		transfer_stat = stat3;
 		this.application = application;
 	}
 	
+	public LinkedList<Course> getCourse(){
+		return course;
+	}
 	public String getName()	{
-		return this.name;
+		return this.stu_name;
 	}
 	public String getNumber(){
-		return this.number;
+		return this.stu_num;
 	}
 	public int getStat1(){
 		return this.first_stat;
@@ -58,17 +61,19 @@ public class Status {
 	public Bulletin getApplication() {		//getter of Bulletin
 		return this.application;
 	}
-	
+	public void setCourse(LinkedList<Course> c){
+		this.course=c;
+	}
 	
 	public void see_course() { // print course info 
 		//it is available to see the courses when the step is 3;
 		if (step == 3) {
 			int count = -1;
 			System.out.println("**********Course info***********");
-			for(Status b : Status.status)
+			for(Course c: course)
 			{
 				System.out.print( ++count + ": ");
-				b.show_info();
+				System.out.println(c.getName());
 			}
 		} 
 		else			//when the step is not in 3 , seeing courses is not available
@@ -84,6 +89,24 @@ public class Status {
 		Status.status.add(myStatus);
 	}
 
+	public void show_first_applicant_info() {
+		if(first_stat==1) {
+			System.out.print("\tStudent name: " + stu_name);
+			System.out.println("\t Student number: " + stu_num);
+		}
+	}
+	public void show_final_applicant_info() {
+		if(final_stat==1) {
+			System.out.print("\tStudent name: " + stu_name);
+			System.out.println("\t Student number: " + stu_num);
+		}
+	}
+	public void show_transfercredit_applicant_info() {
+		if(transfer_stat==1) {
+			System.out.print("\tStudent name: " + stu_name);
+			System.out.println("\t Student number: " + stu_num);
+		}
+	}
 	public void show_info() { // print status
 		System.out.print("Step: " + Status.step);
 		System.out.print("\tFirst Stat: " + first_stat);
