@@ -53,6 +53,8 @@ public class Head_Of_Department extends Person {
 						itr = course.listIterator();
 						find_flag1 = true;
 					}
+					else
+						continue;
 					if (find_flag1) {
 						while (true) {
 							System.out.println("**********" + stu_num + "'s course list**********");
