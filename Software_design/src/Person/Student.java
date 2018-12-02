@@ -1,6 +1,7 @@
 package Person;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Scanner;
 import Bulletin.*;
 import Status.*;
@@ -52,6 +53,26 @@ public class Student extends Person {
 
 
 	public boolean cancel_apply() { // canceling application
+		String quitOption;
+		Status.download();
+		try (Scanner sc = new Scanner(System.in)) {
+
+			System.out.println("Input quit to Quit");
+			quitOption = sc.nextLine();
+			if (quitOption.equals("quit")) {
+				Status.upload();
+				return true;
+			}
+		}
+
+		if(!Status.first_application_check() && !Status.final_application_check())
+			return false;
+		ListIterator<Status> itr=Status.status.listIterator();
+		while(itr.hasNext()) {
+			if(this.getNumber().equals(itr.next().getNumber()))
+				itr.remove();
+		}
+		Status.upload();
 		return true;
 	}
 
