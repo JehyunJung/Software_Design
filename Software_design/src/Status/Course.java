@@ -47,6 +47,6 @@ public class Course {
 	}
 	public void see_applied_course() {
 		if(this.major_stat)
-			System.out.println("Course_name");
+			System.out.println("Course_name: " + Course_name);
 	}
 }

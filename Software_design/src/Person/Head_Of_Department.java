@@ -11,7 +11,6 @@ import Bulletin.Bulletin;
 
 public class Head_Of_Department extends Person {
 	// String dep_name; //Department name
-	LinkedList<Course> status=new LinkedList<>();
 
 	public Head_Of_Department(String name, String number) { // constructor
 		super(name, number);
@@ -23,8 +22,9 @@ public class Head_Of_Department extends Person {
 		String stu_num;
 		boolean find_flag1, find_flag2; // find_flag1 for stu_num search check, find_flag2 for course_name check
 		LinkedList<Course> course = new LinkedList<>();
-		if (Status.final_application_check() != true) {
+		if (Status.transfer_credit_application_check() != true) {
 			System.out.println("Not appropriate step");
+			Status.upload();
 			return false;
 		}
 		Status.download();
@@ -33,8 +33,9 @@ public class Head_Of_Department extends Person {
 			while (true) {
 				System.out.println("**********Student list***********");
 				for (Status s : Status.status) {
-					System.out.println(s.getNumber());
+					// s.
 				}
+
 				find_flag1 = false;
 				System.out.println("Input student number");
 				System.out.println("If you want to quit, Input quit");
@@ -52,13 +53,12 @@ public class Head_Of_Department extends Person {
 						course = b.getCourse();
 						itr = course.listIterator();
 						find_flag1 = true;
-					}
-					else
+					} else
 						continue;
 					if (find_flag1) {
 						while (true) {
 							System.out.println("**********" + stu_num + "'s course list**********");
-							for(Course c : course)
+							for (Course c : course)
 								c.see_applied_course();
 
 							find_flag2 = false;
@@ -73,35 +73,16 @@ public class Head_Of_Department extends Person {
 								return true;
 
 							}
-							
-							for(Course c : course) {
-								if(course_name.equals(c.getName())) {
+
+							for (Course c : course) {
+								if (course_name.equals(c.getName())) {
 									c.set_major(true);
-									c.set_major_stat(true);
-									find_flag2=true;
-								}
-							}
-							if (find_flag2)
-								continue;
-							System.out.println("input transfer credit course not exist");
-
-
-							/*while (itr.hasNext()) {
-								Course temp = itr.next();
-								if (course_name.equals(temp.getName())) {
-									temp.set_major(true);
-									temp.set_major_stat(true);
-									itr.remove();
-									itr.add(temp);
 									find_flag2 = true;
 								}
-
 							}
-
 							if (find_flag2)
 								continue;
 							System.out.println("input transfer credit course not exist");
-							*/
 						}
 					}
 				}
