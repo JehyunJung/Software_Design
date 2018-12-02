@@ -14,32 +14,24 @@ public class Manager extends Person { // faculty class
 		super(name, number);
 	}
 
-	public void print_bull(){ // print bull
+	public boolean print_bull() { // print bull
+		String quitOption;
 		Bulletin.download();
-		for(Bulletin b : Bulletin.bulletin) {
+		for (Bulletin b : Bulletin.bulletin) {
 			b.show_info();
 		}
-		/*
-		ListIterator<Bulletin> itr=Bulletin.bulletin.listIterator();
-		while(true) {
-		
-			//print bull
-			while(itr.hasNext()) {
-				itr.next().show_info();
-			}
-			
-			System.out.println("If you want to quit, Input quit");
-			a = sc.nextLine();
-			if(a.equals("quit")){
-				System.out.println("'print bull' quit");
-				return false;
-			}	
-			else
-			{
+		try (Scanner sc = new Scanner(System.in)) {
+			while (true) {
+				System.out.println("If you want to quit, Input quit");
+				quitOption = sc.nextLine();
+				
+				if (quitOption.equals("quit")) {
+					System.out.println("'print bull' quit");
+					return false;
+				}
 				System.out.println("Input value is not quit");
 			}
-		}*/
-		
+		}
 	}
 
 	public boolean add_bull() { // post bull
@@ -52,16 +44,6 @@ public class Manager extends Person { // faculty class
 		boolean find_flag=false; // needed for repitition check of bulletin
 		Bulletin.download();
 		
-		
-		/*ListIterator<Bulletin> itr = Bulletin.bulletin.listIterator();
-
-		// print bull
-
-		
-		  while(itr.hasNext()) { itr.next().show_info(); }
-		  itr=Bulletin.bulletin.listIterator();
-		 
-*/
 		Bulletin.sort_flag=false;
 		for (Bulletin b : Bulletin.bulletin)
 			b.show_info();
@@ -84,27 +66,22 @@ public class Manager extends Person { // faculty class
 					if (bull_name.equals(b.get_bull_name())) {
 						System.out.println("Same bulletin exists");
 						find_flag = true;
+						break;
 					}
 				}
 				
 				if (find_flag)
 					continue;
 
-				/*
-				 * while(itr.hasNext()) { Bulletin temp = itr.next();
-				 * if(bull_name.equals(temp.getName())){ System.out.println("same bull exist");
-				 * continue; } else System.out.println("same bull not exist"); }
-				 */
-
-				System.out.print("3. Input add college name : ");
+				System.out.print("2. Input add college name : ");
 				col_name = sc.nextLine();
-				System.out.print("2. Input add country : ");
+				System.out.print("3. Input add country : ");
 				country = sc.nextLine();
-				System.out.print("5. Input add period : ");
+				System.out.print("4. Input add period : ");
 				period = sc.nextLine();
-				System.out.print("6. Input add major : ");
+				System.out.print("5. Input add major : ");
 				major = sc.nextLine();
-				System.out.print("4. Input add required grade : ");
+				System.out.print("6. Input add required grade : ");
 				req_score = sc.nextLine();
 				
 				Bulletin.bulletin.add(new Bulletin(bull_name,col_name,country,period,major,req_score));
@@ -122,10 +99,7 @@ public class Manager extends Person { // faculty class
 		try(Scanner sc=new Scanner(System.in)){
 		while(true) {
 			find_flag=false;
-			/*while(itr.hasNext()) {
-				itr.next().show_info();
-			}
-			itr=Bulletin.bulletin.listIterator();*/
+			
 			Bulletin.sort_flag=false;
 			for(Bulletin b : Bulletin.bulletin)
 				b.show_info();
@@ -140,13 +114,14 @@ public class Manager extends Person { // faculty class
 				Bulletin.upload();
 				return true;
 			}
-			
+			itr=Bulletin.bulletin.listIterator();
 			while(itr.hasNext()){
 				Bulletin temp = itr.next();
 				if(bull_name.equals(temp.get_bull_name())){
 					System.out.println("delete bull complete");
 					itr.remove();
 					find_flag=true;
+					break;
 				}
 			}
 			
@@ -162,17 +137,17 @@ public class Manager extends Person { // faculty class
 		boolean find_flag = false;
 		if (Status.first_application_check() != true) {
 			System.out.println("Not appropriate step");
+			Status.upload();
 			return false;
 		}
 		Status.download();
-		//ListIterator<Status> itr = Status.status.listIterator();
 		try (Scanner sc = new Scanner(System.in)) {
 			while (true) {
 				find_flag=false;
 				for (Status s : Status.status)
 					s.show_first_applicant_info();
 
-				//itr = Status.status.listIterator();
+		
 
 				System.out.println("Input first apply pass student number");
 				System.out.println("If you want to quit, Input quit");
@@ -189,25 +164,13 @@ public class Manager extends Person { // faculty class
 						System.out.println(stu_num + "is passed first apply");
 						s.first_modify(2);
 						find_flag=true;
+						break;
 					}
 				}
 				if (find_flag)
 					continue;
 				System.out.println("input student number not exist");
-				/*while (itr.hasNext()) {
-					Status temp = itr.next();
-					if (stu_number.equals(temp.getNumber())) {
-						System.out.println(stu_number + "is passed first apply");
-						temp.first_modify(2);
-						itr.remove();
-						itr.add(temp);
-						find_flag = true;
-					}
-				}
 				
-				if (find_flag)
-					continue;
-				System.out.println("input student number not exist");*/
 			}
 		}
 	}
@@ -215,19 +178,18 @@ public class Manager extends Person { // faculty class
 	public boolean handle_final_apply() { // record final result
 		String stu_num;
 		boolean find_flag = false;
-		if (Status.transfer_credit_application_check() != true) {
+		if (Status.final_application_check() != true) {
 			System.out.println("Not appropriate step");
+			Status.upload();
 			return false;
 		}
 		Status.download();
-		//ListIterator<Status> itr = Status.status.listIterator();
 		try (Scanner sc = new Scanner(System.in)) {
 			while (true) {
 				find_flag = false;
 				for (Status s : Status.status)
 					s.show_final_applicant_info();
 
-				//itr = Status.status.listIterator();
 
 				System.out.println("Input final apply pass student number");
 				System.out.println("If you want to quit, Input quit");
@@ -243,21 +205,13 @@ public class Manager extends Person { // faculty class
 						System.out.println(stu_num + "is passed first apply");
 						s.second_modify(2);
 						find_flag = true;
+						break;
 					}
 				}
 				if (find_flag)
 					continue;
 				System.out.println("input student number not exist");
-				/*
-				 * while (itr.hasNext()) { Status temp = itr.next(); if
-				 * (stu_num.equals(temp.getNumber())) { System.out.println(stu_num +
-				 * "is passed final apply"); temp.second_modify(2); itr.remove(); itr.add(temp);
-				 * find_flag = true; } }
-				 */
 
-				if (find_flag)
-					continue;
-				System.out.println("input student number not exist");
 			}
 
 		}
@@ -266,19 +220,17 @@ public class Manager extends Person { // faculty class
 	public boolean handle_transfercredit_apply() { // record transfer_credit
 		String stu_num;
 		boolean find_flag = false;
-		if (Status.final_application_check() != true) {
+		if (Status.transfer_credit_application_check() != true) {
 			System.out.println("Not appropriate step");
+			Status.upload();
 			return false;
 		}
 		Status.download();
-		//ListIterator<Status> itr = Status.status.listIterator();
 		try (Scanner sc = new Scanner(System.in)) {
 			while (true) {
 				find_flag=false;
 				for (Status s : Status.status)
-					s.show_transfercredit_applicant_info();
-
-				//itr = Status.status.listIterator();
+					s.show_transfercredit_applicant_info();		
 
 				System.out.println("Input transfercredit apply pass student number");
 				System.out.println("If you want to quit, Input quit");
@@ -294,26 +246,12 @@ public class Manager extends Person { // faculty class
 						System.out.println(stu_num + "is passed first apply");
 						s.final_modify(2);
 						find_flag = true;
+						break;
 					}
 				}
 				if (find_flag)
 					continue;
 				System.out.println("input student number not exist");
-/*
-				while (itr.hasNext()) {
-					Status temp = itr.next();
-					if (stu_num.equals(temp.getNumber())) {
-						System.out.println(stu_num + "is passed transfercredit apply");
-						temp.final_modify(2);
-						itr.remove();
-						itr.add(temp);
-						find_flag = true;
-					}
-					if (find_flag)
-						continue;
-					System.out.println("input student number not exist");
-				}
- 				*/
 			}
 		}
 	}

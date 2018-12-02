@@ -121,7 +121,7 @@ public class Bulletin  {
 	public void show_info() {
 		if(Bulletin.sort_flag!=true) {
 			sort();
-			Bulletin.sort_flag=false;
+			Bulletin.sort_flag=true;
 		}
 		System.out.print("Bull_name: " + bull_name);		//print the name of bulletin board;
 		System.out.print("College_name: " + coll_name);		//print the name of exchange school
