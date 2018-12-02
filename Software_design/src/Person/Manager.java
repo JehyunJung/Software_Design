@@ -7,13 +7,21 @@ import Bulletin.*;
 import Status.*;
 
 public class Manager extends Person { // faculty class
-	
-	
-	
+
 	public Manager(String name, String number) {
 		super(name, number);
 	}
 
+	public void dispatch_add() {
+		Dispatch_Record.download();
+		Status.download();
+		for(Status s : Status.status) {
+			if(s.getStat2() == 2)
+				Dispatch_Record.add_Dispatch_to_list((s.getApplication()).get_coll_name(),(s.getApplication()).get_period(), (s.getApplication()).get_major());
+		}
+		Dispatch_Record.upload();
+	}
+	
 	public boolean print_bull() { // print bull
 		String quitOption;
 		Bulletin.download();
@@ -156,6 +164,7 @@ public class Manager extends Person { // faculty class
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_first_apply' quit");
 					Status.upload();
+					Status.step = 2;
 					return true;
 				}
 				
@@ -198,6 +207,7 @@ public class Manager extends Person { // faculty class
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_final_apply' quit");
 					Status.upload();
+					Status.step = 3;
 					return true;
 				}
 				for (Status s : Status.status) {
@@ -239,6 +249,8 @@ public class Manager extends Person { // faculty class
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_transfercredit_apply' quit");
 					Status.upload();
+					Status.step = 5;
+					dispatch_add();
 					return true;
 				}
 				for (Status s : Status.status) {
@@ -257,22 +269,35 @@ public class Manager extends Person { // faculty class
 	}
 
 	public boolean see_dispatch_rec() { // see dispatch record
-		String quitOption;
+		String a;
+		int count=0;
 		Dispatch_Record.download();
-		
 		Dispatch_Record.sort_flag=false;
-		for (Dispatch_Record d : Dispatch_Record.dispatch_record)
-			d.show_info();
 		
 		try (Scanner sc = new Scanner(System.in)) {
 			while (true) {
+				System.out.println("Input dispatch record period you want");
+				System.out.println("ex) 2018_1");
 				System.out.println("If you want to quit, Input quit");
-				quitOption = sc.nextLine();
-				if (quitOption.equals("quit")) {
+				a = sc.nextLine();
+				if (a.equals("quit")) {
 					System.out.println("'see dispatch record' quit");
 					return true;
 				} 
-				System.out.println("Input value is not quit");
+				else {
+					for (Dispatch_Record d : Dispatch_Record.dispatch_record)
+					{
+						if((d.get_period()).equals(a))
+						{
+							d.show_info();
+							count++;
+						}
+					}	
+					if(count==0)
+						System.out.println("Input value is error");
+					count=0;
+					continue;
+				}	
 			}
 		}
 	}
