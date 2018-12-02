@@ -77,13 +77,14 @@ public class Bulletin  {
 
 
 	public static void download() { // Download Bulletin from DB with Student ID
-		Iterator<Bulletin> itr=bulletin.iterator();
+		Bulletin.bulletin.clear();
 		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Bulletin.bin"))) {
 			//download the Bulletin data from DB to list
 			while (true) {
-				if (oi.readObject() == null)
+				Bulletin mytemp=(Bulletin)oi.readObject();
+				if (mytemp == null)
 					break;
-				Bulletin.bulletin.add(itr.next());
+				Bulletin.bulletin.add(mytemp);
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();

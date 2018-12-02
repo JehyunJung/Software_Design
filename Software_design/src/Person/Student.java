@@ -57,7 +57,7 @@ public class Student extends Person {
 		Status.download();
 		try (Scanner sc = new Scanner(System.in)) {
 
-			System.out.println("Input quit to Quit");
+			System.out.println("Input quit to quit cancel_apply");
 			quitOption = sc.nextLine();
 			if (quitOption.equals("quit")) {
 				Status.upload();
@@ -65,12 +65,17 @@ public class Student extends Person {
 			}
 		}
 
-		if(!Status.first_application_check() && !Status.final_application_check())
+		if(!Status.first_application_check() && !Status.final_application_check()) {
+			System.out.println("Not appropriate step");
+			Status.upload();
 			return false;
+		}
 		ListIterator<Status> itr=Status.status.listIterator();
 		while(itr.hasNext()) {
-			if(this.getNumber().equals(itr.next().getNumber()))
+			if(this.getNumber().equals(itr.next().getNumber())) {
 				itr.remove();
+				break;
+			}		
 		}
 		Status.upload();
 		return true;
@@ -175,6 +180,68 @@ public class Student extends Person {
 		}
 	}
 
+	public boolean major_apply() {
+		Boolean find_flag1, find_flag2;
+		String quitOption, course_name;
+		LinkedList<Course> course = new LinkedList<>();
+		if (Status.transfer_credit_application_check() != true) {
+			Status.upload();
+			return false;
+		}
+
+		Status.download();
+		try (Scanner sc = new Scanner(System.in)) {
+
+			find_flag1 = false;
+			System.out.println("If you want to quit, Input quit");
+			quitOption = sc.nextLine();
+
+			if (quitOption.equals("quit")) {
+				Status.upload();
+				return true;
+			}
+
+			for (Status s : Status.status) {
+				if (number.equals(s.getNumber())) {
+					find_flag1 = true;
+					course = s.getCourse();
+				} else
+					continue;
+				if (find_flag1) {
+					while (true) {
+						System.out.println("**********" + number + "'s course list**********");
+						for (Course c : course)
+							System.out.println(c.getName());
+
+						find_flag2 = false;
+						System.out.println("Input course name to apply for major_change ");
+						System.out.println("If you want to quit, Input quit");
+						course_name = sc.nextLine();
+
+						if (course_name.equals("quit")) {
+							System.out.println("'transfer credit course name' quit");
+							s.setCourse(course);
+							Status.upload();
+							return true;
+						}
+
+						for (Course c : course) {
+							if (course_name.equals(c.getName())) {
+								c.set_major_stat(true);
+								find_flag2 = true;
+								break;
+							}
+						}
+						if (find_flag2)
+							continue;
+						System.out.println("input course name does not exist");
+					}
+				}
+			}
+			Status.upload();
+			return false;
+		}
+	}
 
 
 	public boolean student_option() {
@@ -205,12 +272,14 @@ public class Student extends Person {
 		case 4:
 			finalapply();
 		case 5:
-			apply_transfercredits();
+			major_apply();
 		case 6:
-			cancel_apply();
+			apply_transfercredits();
 		case 7:
-			see_dispatch_record();
+			cancel_apply();
 		case 8:
+			see_dispatch_record();
+		case 9:
 			logout();
 		}
 		

@@ -60,13 +60,14 @@ public class Dispatch_Record{
 
 
 	public static void download() { // Download Dispatch from DB with Student ID
-		Iterator<Dispatch_Record> itr=dispatch_record.iterator();
+		Dispatch_Record.dispatch_record.clear();
 		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Dispatch_Record.bin"))) {
 			//download the Dispatch_Record data from DB to list
 			while (true) {
-				if (oi.readObject() == null)
+				Dispatch_Record mytemp=(Dispatch_Record)oi.readObject();
+				if (mytemp == null)
 					break;
-				Dispatch_Record.dispatch_record.add(itr.next());
+				Dispatch_Record.dispatch_record.add(mytemp);
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();

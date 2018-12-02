@@ -46,7 +46,7 @@ public class Course {
 		major_stat = b;
 	}
 	public void see_applied_course() {
-		if(this.major_stat)
+		if(this.major_stat && !this.major)
 			System.out.println("Course_name: " + Course_name);
-	}
+	}	
 }

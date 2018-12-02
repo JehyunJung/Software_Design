@@ -21,7 +21,7 @@ public class Status {
 	String stu_name;
 	String stu_num;
 
-	static int step; // Current application step
+	public static int step; // Current application step
 
 	int first_stat; // first application status
 	int final_stat; // final application status
@@ -164,14 +164,17 @@ public class Status {
 	}
 
 	public static void download() { // Download status from DB with Student ID
+		Status.status.clear();
 		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Status.bin"))) {
 			//first status data is used to represent the step
+			
 			Status.step = ((Status) oi.readObject()).first_stat;
 			//download the status data from DB to list
 			while (true) {
-				if (oi.readObject() == null)
+				Status mytemp=(Status)oi.readObject();
+				if (mytemp == null)
 					break;
-				Status.status.add((Status) oi.readObject());
+				Status.status.add(mytemp);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
