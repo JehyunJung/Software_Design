@@ -1,42 +1,68 @@
 package Status;
 
 import java.util.List;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 //Student package
 import Bulletin.*;
 
-public class Status {
-	String name;
-	String number;
 
-	static int step; // Current application step
+
+public class Status {
+	String stu_name;
+	String stu_num;
+
+	public static int step; // Current application step
 
 	int first_stat; // first application status
 	int final_stat; // final application status
 	int transfer_stat; // transfer_credit status
 	Bulletin application; // application information
-	List<Course> course;
+	LinkedList<Course> course;
 	public static LinkedList<Status> status = new LinkedList<>();
 
 	public Status(String name, String number, int stat1, int stat2, int stat3, Bulletin application) {
-		this.name = name;
-		this.number = number;
+		this.stu_name = name;
+		this.stu_num = number;
 		first_stat = stat1;
 		final_stat = stat2;
 		transfer_stat = stat3;
 		this.application = application;
 	}
 	
-	public String getNumber()
-	{
-		return this.number;
+	public LinkedList<Course> getCourse(){
+		return course;
+	}
+	public String getName()	{
+		return this.stu_name;
+	}
+	public String getNumber(){
+		return this.stu_num;
+	}
+	public int getStat1(){
+		return this.first_stat;
+	}
+	public int getStat2(){
+		return this.final_stat;
+	}
+	public int getStat3(){
+		return this.transfer_stat;
+	}
+
+	public Bulletin getApplication() {		//getter of Bulletin
+		return this.application;
+	}
+	public void setCourse(LinkedList<Course> c){
+		this.course=c;
 	}
 	
 	public void see_course() { // print course info 
@@ -44,10 +70,10 @@ public class Status {
 		if (step == 3) {
 			int count = -1;
 			System.out.println("**********Course info***********");
-			for(Status b : Status.status)
+			for(Course c: course)
 			{
 				System.out.print( ++count + ": ");
-				b.show_info();
+				System.out.println(c.getName());
 			}
 		} 
 		else			//when the step is not in 3 , seeing courses is not available
@@ -63,6 +89,24 @@ public class Status {
 		Status.status.add(myStatus);
 	}
 
+	public void show_first_applicant_info() {
+		if(first_stat==1) {
+			System.out.print("\tStudent name: " + stu_name);
+			System.out.println("\t Student number: " + stu_num);
+		}
+	}
+	public void show_final_applicant_info() {
+		if(final_stat==1) {
+			System.out.print("\tStudent name: " + stu_name);
+			System.out.println("\t Student number: " + stu_num);
+		}
+	}
+	public void show_transfercredit_applicant_info() {
+		if(transfer_stat==1) {
+			System.out.print("\tStudent name: " + stu_name);
+			System.out.println("\t Student number: " + stu_num);
+		}
+	}
 	public void show_info() { // print status
 		System.out.print("Step: " + Status.step);
 		System.out.print("\tFirst Stat: " + first_stat);
@@ -90,18 +134,21 @@ public class Status {
 		return false;
 	}
 
-	/*
-	 * public boolean first_modify() { // set STEP ->
-	 * 
-	 * 
-	 * } public boolean second_modify() { // set STEP ->
-	 * 
-	 * 
-	 * } public boolean final_modify() { // set STEP ->
-	 * 
-	 * 
-	 * }
-	 */
+	
+	 public boolean first_modify(int i) { // set STEP -> 1
+		 
+		 this.first_stat = i;
+		 return true;	  
+	 } 
+	 public boolean second_modify(int i) { // set STEP -> 2
+		 
+		 this.final_stat = i; // "sim-sa-jung"
+		 return true;	  
+	  } 
+	 public boolean final_modify(int i) { // set STEP ->
+		 this.transfer_stat = i;
+		 return true;
+	  }
 	public static void upload() { // Upload status data to DB
 		Iterator<Status> itr=status.iterator();
 		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("Status.bin"))) {
@@ -117,20 +164,48 @@ public class Status {
 	}
 
 	public static void download() { // Download status from DB with Student ID
+		Status.status.clear();
 		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Status.bin"))) {
 			//first status data is used to represent the step
+			
 			Status.step = ((Status) oi.readObject()).first_stat;
 			//download the status data from DB to list
 			while (true) {
-				if (oi.readObject() == null)
+				Status mytemp=(Status)oi.readObject();
+				if (mytemp == null)
 					break;
-				Status.status.add((Status) oi.readObject());
+				Status.status.add(mytemp);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void makeCourses() {
+		int count=0,index=0;
+		int i=0;
+		SecureRandom sr=new SecureRandom();
+		LinkedList<String> string=new LinkedList<>();
+		try(BufferedReader fr=new BufferedReader(new FileReader("Courses.txt"))){
+			while(true) {
+			if(fr.readLine()==null)
+				break;
+			count++;
+			string.add(fr.readLine());
+			}
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		for(i=0;i<6;i++) {
+			index=sr.nextInt()%count;
+			course.add(new Course(string.get(index)));
+		}
+		
+		
 	}
 
 }

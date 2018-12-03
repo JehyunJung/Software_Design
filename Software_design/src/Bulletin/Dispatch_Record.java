@@ -7,24 +7,34 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Dispatch_Record{
-	String stu_name;			//student name
-	String col_name;			//college name
+	String coll_name;			//college name
 	String period;				//exchange student period
 	String major;				//exchange student major
+	public static boolean sort_flag=false;		//checking for sorting repitition
 	public static LinkedList<Dispatch_Record> dispatch_record=new LinkedList<>();	//Linkedlist of Dispatch
-	public Dispatch_Record(String s_name, String c_name, String period, String major) {
-		stu_name=s_name;
-		col_name=c_name;
+	public Dispatch_Record(String c_name, String period, String major) {
+		coll_name=c_name;
 		this.period=period;
 		this.major=major;
 	}
-
+	
+	public String get_coll_name() {
+		return this.coll_name;
+	}
+	
+	public String get_period() {
+		return this.period;
+	}
+	public String get_major() {
+		return this.major;
+	}
 	// add bulletin to list;
-	public static void add_Dispatch_to_list(String name, String score, String period, String major){
+	public static void add_Dispatch_to_list(String coll_name, String period, String major){
 		//create Bulletin and insert to list;
-		Dispatch_Record myDispatch = new Dispatch_Record(name, score,period,major);
+		Dispatch_Record myDispatch = new Dispatch_Record(coll_name,period,major);
 		dispatch_record.add(myDispatch);
 	}
 	
@@ -44,22 +54,49 @@ public class Dispatch_Record{
 
 
 	public static void download() { // Download Dispatch from DB with Student ID
-		Iterator<Dispatch_Record> itr=dispatch_record.iterator();
+		Dispatch_Record.dispatch_record.clear();
 		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Dispatch_Record.bin"))) {
 			//download the Dispatch_Record data from DB to list
 			while (true) {
-				if (oi.readObject() == null)
+				Dispatch_Record mytemp=(Dispatch_Record)oi.readObject();
+				if (mytemp == null)
 					break;
-				Dispatch_Record.dispatch_record.add(itr.next());
+				Dispatch_Record.dispatch_record.add(mytemp);
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		} 
 	}
+	public void sort() {
+		int num;
+		System.out.println("**********Input Sorting options**********");
+		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to quit");
+		try(Scanner sc=new Scanner(System.in)){
+			num=sc.nextInt();
+		}
+		switch(num) {
+		case -1:
+			return;
+		case 1:
+			dispatch_record.sort((d1,d2)->d1.get_coll_name().compareTo(d2.get_coll_name()));
+			break;
+		case 2:
+			dispatch_record.sort((d1,d2)->d1.get_period().compareTo(d2.get_period()));
+			break;
+		case 3:
+			dispatch_record.sort((d1,d2)->d1.get_major().compareTo(d2.get_major()));
+			break;
+		}
+		
+	}
 	
 	public void show_info() {
-		System.out.print("Student_name: " + stu_name);		//print student name
-		System.out.print("\tCollege_name: " + col_name);		//print college name
+		if(Dispatch_Record.sort_flag!=true) {
+			sort();
+			Dispatch_Record.sort_flag=true;
+		}
+	
+		System.out.print("College_name: " + coll_name);		//print college name
 		System.out.print("\tPeriod: " + period);			//print exchange student period
 		System.out.println("\tMajor: " + major);				//print exchange student major
 	}

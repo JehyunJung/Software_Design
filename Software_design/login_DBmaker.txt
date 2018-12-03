@@ -1,0 +1,35 @@
+try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("LOGIN_DB.bin"));
+				Scanner sc = new Scanner(System.in)) {
+			while (true) {
+				String ID;
+				String PW;
+				int type;
+				String name;
+				String num;
+				String score;
+
+				System.out.print(" INPUT REGISETER ID    : ");
+				ID = sc.next();
+
+				if (ID.equals("quit"))
+					break;
+
+				System.out.print(" INPUT REGISETER PSWRD : ");
+				PW = sc.next();
+				System.out.print(" INPUT REGISETER TYPE  : ");
+				type = sc.nextInt();
+
+				System.out.print(" INPUT REGISETER NAME  : ");
+				name = sc.next();
+
+				System.out.print(" INPUT REGISETER NUM   : ");
+				num = sc.next();
+				System.out.print(" INPUT REGISETER SCORE : ");
+				score = sc.next();
+
+				Information_class temp = new Information_class(ID, PW, type, name, num, score);
+				oo.writeObject(temp);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
