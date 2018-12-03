@@ -7,7 +7,6 @@ import Bulletin.*;
 import Status.*;
 
 public class Manager extends Person { // faculty class
-
 	public Manager(String name, String number) {
 		super(name, number);
 	}

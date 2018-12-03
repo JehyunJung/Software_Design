@@ -250,8 +250,8 @@ public class Student extends Person {
 
 			System.out.println("**********Student Options**********");
 			System.out.println("1. search for student's current status\n" + "2. print appliable Bulletin and apply\n"
-					+ "3. register document\n" + "4. final application\n" + "5. apply for transfer credit"
-					+ "6. canceling application\n" + "7. see dispatch record" + "8. logout");
+					+ "3. register document\n" + "4. final application\n" + "5. apply for transfer credit\n"
+					+ "6. canceling application\n" + "7. see dispatch record\n" + "8. logout");
 			while (true) {
 				System.out.print("Insert option: ");
 				menu_option = sc.nextInt();

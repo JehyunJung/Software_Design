@@ -1,0 +1,32 @@
+ID: Kim
+PW : 123
+type : 0
+name: Kim 
+num : 001
+score: A
+ID: Sung
+PW : 111
+type : 0
+name:  Sung
+num : 002
+score: B
+ID: Han
+PW : 167
+type : 0
+name: Han 
+num : 003
+score: A
+
+ID: Tom
+PW : 155
+type : 1
+name: Tom 
+num : 001
+score: 0
+
+ID: Henry
+PW : 222
+type : 2
+name: Henry
+num : 010
+score: 0
