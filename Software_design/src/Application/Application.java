@@ -11,9 +11,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 class Information_class implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	String ID;
 	String PW;

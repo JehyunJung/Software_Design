@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Dispatch_Record{
-	String stu_name;			//student name
 	String coll_name;			//college name
 	String period;				//exchange student period
 	String major;				//exchange student major
