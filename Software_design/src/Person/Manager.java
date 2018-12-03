@@ -13,8 +13,10 @@ public class Manager extends Person { // faculty class
 
 	public void dispatch_add() {
 		Dispatch_Record.download();
-		Status.download();
-		for(Status s : Status.status) {
+		if(Status.download() == false) {
+			System.out.println("Status not found ");
+			return;
+		}for(Status s : Status.status) {
 			if(s.getStat2() == 2)
 				Dispatch_Record.add_Dispatch_to_list((s.getApplication()).get_coll_name(),(s.getApplication()).get_period(), (s.getApplication()).get_major());
 		}
@@ -27,18 +29,19 @@ public class Manager extends Person { // faculty class
 		for (Bulletin b : Bulletin.bulletin) {
 			b.show_info();
 		}
-		try (Scanner sc = new Scanner(System.in)) {
+		Scanner sc = new Scanner(System.in);
 			while (true) {
 				System.out.println("If you want to quit, Input quit");
 				quitOption = sc.nextLine();
 				
 				if (quitOption.equals("quit")) {
 					System.out.println("'print bull' quit");
+					sc.close();
 					return false;
 				}
 				System.out.println("Input value is not quit");
 			}
-		}
+		
 	}
 
 	public boolean add_bull() { // post bull
@@ -55,7 +58,7 @@ public class Manager extends Person { // faculty class
 		for (Bulletin b : Bulletin.bulletin)
 			b.show_info();
 
-		try (Scanner sc = new Scanner(System.in)) {
+		Scanner sc = new Scanner(System.in);
 			while (true) {
 				find_flag=false;
 				System.out.println("Don't input space in the one info member");
@@ -66,6 +69,7 @@ public class Manager extends Person { // faculty class
 				if (bull_name.equals("quit")) {
 					System.out.println("'add bull' quit");
 					Bulletin.upload();
+					sc.close();
 					return true;
 				}
 				// checking for bulletin name repitition
@@ -94,7 +98,7 @@ public class Manager extends Person { // faculty class
 				Bulletin.bulletin.add(new Bulletin(bull_name,col_name,country,period,major,req_score));
 			}
 
-		}
+		
 	}
 
 	public boolean del_bull() { // delete bull
@@ -103,7 +107,7 @@ public class Manager extends Person { // faculty class
 		Bulletin.download();
 		
 		ListIterator<Bulletin> itr=Bulletin.bulletin.listIterator();
-		try(Scanner sc=new Scanner(System.in)){
+		Scanner sc=new Scanner(System.in);
 		while(true) {
 			find_flag=false;
 			
@@ -119,6 +123,7 @@ public class Manager extends Person { // faculty class
 			if(bull_name.equals("quit")){
 				System.out.println("'delete bull' quit");
 				Bulletin.upload();
+				sc.close();
 				return true;
 			}
 			itr=Bulletin.bulletin.listIterator();
@@ -136,19 +141,24 @@ public class Manager extends Person { // faculty class
 				continue;	
 			System.out.println("input bull not exist");
 			}
-		}
+		
 	}
 
 	public boolean handle_first_apply() { // record first result
 		String stu_num;
 		boolean find_flag = false;
+		
+		if(Status.download() == false) {
+			System.out.println("Status not found ");
+			return false;
+		}
+		
 		if (Status.first_application_check() != true) {
 			System.out.println("Not appropriate step");
 			Status.upload();
 			return false;
 		}
-		Status.download();
-		try (Scanner sc = new Scanner(System.in)) {
+		Scanner sc = new Scanner(System.in);
 			while (true) {
 				find_flag=false;
 				for (Status s : Status.status)
@@ -164,6 +174,7 @@ public class Manager extends Person { // faculty class
 					System.out.println("'handle_first_apply' quit");
 					Status.upload();
 					Status.step = 2;
+					sc.close();
 					return true;
 				}
 				
@@ -180,19 +191,22 @@ public class Manager extends Person { // faculty class
 				System.out.println("input student number not exist");
 				
 			}
-		}
+		
 	}
 
 	public boolean handle_final_apply() { // record final result
 		String stu_num;
 		boolean find_flag = false;
+		if(Status.download() == false) {
+			System.out.println("Status not found ");
+			return false;
+		}
 		if (Status.final_application_check() != true) {
 			System.out.println("Not appropriate step");
 			Status.upload();
 			return false;
 		}
-		Status.download();
-		try (Scanner sc = new Scanner(System.in)) {
+		Scanner sc = new Scanner(System.in);
 			while (true) {
 				find_flag = false;
 				for (Status s : Status.status)
@@ -207,11 +221,12 @@ public class Manager extends Person { // faculty class
 					System.out.println("'handle_final_apply' quit");
 					Status.upload();
 					Status.step = 3;
+					sc.close();
 					return true;
 				}
 				for (Status s : Status.status) {
 					if (stu_num.equals(s.getNumber())) {
-						System.out.println(stu_num + "is passed first apply");
+						System.out.println(stu_num + "is passed final apply");
 						s.second_modify(2);
 						find_flag = true;
 						break;
@@ -223,19 +238,23 @@ public class Manager extends Person { // faculty class
 
 			}
 
-		}
+		
 	}
 
 	public boolean handle_transfercredit_apply() { // record transfer_credit
 		String stu_num;
 		boolean find_flag = false;
+		if(Status.download() == false) {
+			System.out.println("Status not found ");
+			return false;
+		}
+		
 		if (Status.transfer_credit_application_check() != true) {
 			System.out.println("Not appropriate step");
 			Status.upload();
 			return false;
 		}
-		Status.download();
-		try (Scanner sc = new Scanner(System.in)) {
+		Scanner sc = new Scanner(System.in) ;
 			while (true) {
 				find_flag=false;
 				for (Status s : Status.status)
@@ -250,11 +269,12 @@ public class Manager extends Person { // faculty class
 					Status.upload();
 					Status.step = 5;
 					dispatch_add();
+					sc.close();
 					return true;
 				}
 				for (Status s : Status.status) {
 					if (stu_num.equals(s.getNumber())) {
-						System.out.println(stu_num + "is passed first apply");
+						System.out.println(stu_num + "is passed transfercredit apply");
 						s.final_modify(2);
 						find_flag = true;
 						break;
@@ -264,7 +284,7 @@ public class Manager extends Person { // faculty class
 					continue;
 				System.out.println("input student number not exist");
 			}
-		}
+		
 	}
 
 	public boolean see_dispatch_rec() { // see dispatch record
@@ -273,7 +293,7 @@ public class Manager extends Person { // faculty class
 		Dispatch_Record.download();
 		Dispatch_Record.sort_flag=false;
 		
-		try (Scanner sc = new Scanner(System.in)) {
+		Scanner sc = new Scanner(System.in);
 			while (true) {
 				System.out.println("Input dispatch record period you want");
 				System.out.println("ex) 2018_1");
@@ -281,6 +301,7 @@ public class Manager extends Person { // faculty class
 				a = sc.nextLine();
 				if (a.equals("quit")) {
 					System.out.println("'see dispatch record' quit");
+					sc.close();
 					return true;
 				} 
 				else {
@@ -298,43 +319,56 @@ public class Manager extends Person { // faculty class
 					continue;
 				}	
 			}
-		}
+		
 	}
 
 	public boolean manager_option() {
 		int menu_option;
-
-		System.out.println("**********Manager Options**********");
-		System.out.println("1. print Bull\n"+"2. post bull\n" + "3. delete bull\n" + "4. handle_first_apply\n"
-				+ "5. record final result\n" + "6. record transfer result\n" + "7. see dispatch record\n" + "8. logout");
-		try (Scanner sc = new Scanner(System.in)) {
+		Scanner sc = new Scanner(System.in);
 			while (true) {
-				System.out.print("Insert option: ");
-				menu_option = sc.nextInt();
-				if (menu_option >= 1 && menu_option <= 8)
+				System.out.println("**********Manager Options**********");
+				System.out.println("1. print Bull\n" + "2. post bull\n" + "3. delete bull\n" + "4. handle_first_apply\n"
+						+ "5. record final result\n" + "6. record transfer result\n" + "7. see dispatch record\n"
+						+ "8. logout");
+
+				while (true) {
+					System.out.print("Insert option: ");
+					menu_option = sc.nextInt();
+					if (menu_option >= 1 && menu_option <= 8)
+						break;
+					System.out.println("Wrong input\n");
+				}
+
+				switch (menu_option) {
+				case 1:
+					print_bull();
 					break;
-				System.out.println("Wrong input\n");
+				case 2:
+					add_bull();
+					break;
+				case 3:
+					del_bull();
+					break;
+				case 4:
+					handle_first_apply();
+					break;
+				case 5:
+					handle_final_apply();
+					break;
+				case 6:
+					handle_transfercredit_apply();
+					break;
+				case 7:
+					see_dispatch_rec();
+					break;
+				case 8:
+					sc.close();
+					return true;
+				}
+
+
 			}
-		}
-		switch (menu_option) {
-		case 1:
-			print_bull();
-		case 2:
-			add_bull();
-		case 3:
-			del_bull();
-		case 4:
-			handle_first_apply();
-		case 5:
-			handle_final_apply();
-		case 6:
-			handle_transfercredit_apply();
-		case 7:
-			see_dispatch_rec();
-		case 8:
-			logout();
-		}
-		return false;
+
+		
 	}
-	
 }

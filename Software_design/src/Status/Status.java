@@ -1,13 +1,14 @@
 package Status;
 
-import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,7 +18,11 @@ import Bulletin.*;
 
 
 
-public class Status {
+public class Status implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String stu_name;
 	String stu_num;
 
@@ -107,6 +112,7 @@ public class Status {
 			System.out.println("\t Student number: " + stu_num);
 		}
 	}
+	
 	public void show_info() { // print status
 		System.out.print("Step: " + Status.step);
 		System.out.print("\tFirst Stat: " + first_stat);
@@ -158,17 +164,46 @@ public class Status {
 			//upload the status data from list to DB
 			while(itr.hasNext())
 				oo.writeObject(itr.next());
+			oo.writeObject(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void download() { // Download status from DB with Student ID
+	public static boolean download() { // Download status from DB with Student ID
 		Status.status.clear();
-		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Status.bin"))) {
-			//first status data is used to represent the step
+		Status temp;
+		int count=0;
+
+		try {
+			FileInputStream fin = new FileInputStream("STATUS.bin");
 			
-			Status.step = ((Status) oi.readObject()).first_stat;
+			try {
+				int c=fin.read();
+				if (c == -1) {
+					//System.out.println("FXXk");
+					fin.close();
+					return false;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("STATUS.bin"))) {
+			//first status data is used to represent the step
+			temp = (Status)oi.readObject();		
+			if(temp==null) {
+				if(count==0)
+					return false;
+				return true;
+			}
+			count++;
+			Status.step = (int)temp.first_stat;
 			//download the status data from DB to list
 			while (true) {
 				Status mytemp=(Status)oi.readObject();
@@ -176,10 +211,14 @@ public class Status {
 					break;
 				Status.status.add(mytemp);
 			}
-		} catch (IOException e) {
+			return true;
+		}
+		catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 	

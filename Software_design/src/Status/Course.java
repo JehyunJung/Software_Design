@@ -37,6 +37,9 @@ public class Course {
 	public boolean get_major() {
 		return this.major;
 	}
+	public char get_Score() {
+		return score;
+	}
 
 	public void set_major(boolean b) {
 		major=b;

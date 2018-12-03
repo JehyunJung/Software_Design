@@ -1,6 +1,7 @@
 package Bulletin;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -47,35 +48,61 @@ public class Dispatch_Record{
 			//upload the Dispatch_Record data from list to DB
 			while(itr.hasNext())
 				oo.writeObject(itr.next());
+			oo.writeObject(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 
-	public static void download() { // Download Dispatch from DB with Student ID
+	public static boolean download() { // Download Dispatch from DB with Student ID
 		Dispatch_Record.dispatch_record.clear();
+		
+		try {
+			FileInputStream fin = new FileInputStream("Dispatch_Record.bin");
+			
+			try {
+				int c=fin.read();
+				if (c== -1) {
+					//System.out.println("FXXk");
+					fin.close();
+					return false;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
 		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Dispatch_Record.bin"))) {
-			//download the Dispatch_Record data from DB to list
+			// download the Dispatch_Record data from DB to list
 			while (true) {
-				Dispatch_Record mytemp=(Dispatch_Record)oi.readObject();
+				Dispatch_Record mytemp = (Dispatch_Record) oi.readObject();
 				if (mytemp == null)
 					break;
 				Dispatch_Record.dispatch_record.add(mytemp);
 			}
+			return true;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-		} 
+			return false;
+		}
+
 	}
 	public void sort() {
 		int num;
 		System.out.println("**********Input Sorting options**********");
 		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to quit");
-		try(Scanner sc=new Scanner(System.in)){
+		Scanner sc=new Scanner(System.in);
 			num=sc.nextInt();
-		}
+		
 		switch(num) {
 		case -1:
+			sc.close();
 			return;
 		case 1:
 			dispatch_record.sort((d1,d2)->d1.get_coll_name().compareTo(d2.get_coll_name()));
@@ -87,7 +114,7 @@ public class Dispatch_Record{
 			dispatch_record.sort((d1,d2)->d1.get_major().compareTo(d2.get_major()));
 			break;
 		}
-		
+		sc.close();
 	}
 	
 	public void show_info() {

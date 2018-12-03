@@ -1,12 +1,11 @@
 package Bulletin;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -65,40 +64,70 @@ public class Bulletin  {
 	
 	
 	public static void upload() { // Upload Bulletin data to DB
-		Iterator<Bulletin> itr=bulletin.iterator();
+		Iterator<Bulletin> itr = bulletin.iterator();
 		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("Bulletin.bin"))) {
-			//upload the Bulletin data from list to DB
-			while(itr.hasNext())
+			// upload the Bulletin data from list to DB
+			while (itr.hasNext())
 				oo.writeObject(itr.next());
+			oo.writeObject(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 
-	public static void download() { // Download Bulletin from DB with Student ID
+	public static boolean download() { // Download Bulletin from DB with Student ID
 		Bulletin.bulletin.clear();
+		
+		try {
+			FileInputStream fin = new FileInputStream("Bulletin.bin");
+			
+			try {
+				int c=fin.read();
+				if (c == -1) {
+					//System.out.println("FXXk");
+					fin.close();
+					return false;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			//System.out.println("FXXk! ");
+			e1.printStackTrace();
+		}
+		
+		
+		
+		// --- if data exist ---
 		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Bulletin.bin"))) {
 			//download the Bulletin data from DB to list
 			while (true) {
 				Bulletin mytemp=(Bulletin)oi.readObject();
 				if (mytemp == null)
-					break;
+					return false;
 				Bulletin.bulletin.add(mytemp);
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
+			return false;
 		} 
+		
 	}
 	public void sort() {
 		int num;
 		System.out.println("**********Input Sorting options**********");
 		System.out.println("1. By bulletin_name\t2. By college_name\t3. By_country\t4.By_period\t5.By_required_score\n Input -1 to quit");
-		try(Scanner sc=new Scanner(System.in)){
+		Scanner sc=new Scanner(System.in);
 			num=sc.nextInt();
-		}
+		
 		switch(num) {
 		case -1:
+			sc.close();
 			return;
 		case 1:
 			bulletin.sort((b1,b2)->b1.get_bull_name().compareTo(b2.get_bull_name()));
@@ -116,6 +145,7 @@ public class Bulletin  {
 			bulletin.sort((b1,b2)->b1.get_req_score().compareTo(b2.get_req_score()));
 			break;
 		}
+		sc.close();
 		
 	}
 	

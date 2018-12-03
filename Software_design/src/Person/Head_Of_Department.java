@@ -11,13 +11,18 @@ public class Head_Of_Department extends Person {
 	public boolean handle_transfercredits_apply() { // handle with tranfer_credits applications
 		String course_name;
 		boolean find_flag=false; // find_flag for course_name check
-		if (Status.transfer_credit_application_check() != true) {
-			System.out.println("Not appropriate step");
-			Status.upload();
+		Scanner sc = new Scanner(System.in);
+		if(Status.download() == false) {
+			System.out.println("Status not found ");
+			sc.close();
 			return false;
 		}
-		Status.download();
-		try (Scanner sc = new Scanner(System.in)) {
+		if (Status.transfer_credit_application_check() != true) {
+			System.out.println("Not appropriate step");
+			sc.close();
+			return false;
+		}
+		
 			while (true) {
 				System.out.println("**********Major applied course***********");
 				for (Status s : Status.status) {
@@ -32,6 +37,7 @@ public class Head_Of_Department extends Person {
 				if (course_name.equals("quit")) {
 					System.out.println("'transfer credit course' quit");
 					Status.upload();
+					sc.close();
 					return true;
 				}
 				find_flag=false;
@@ -47,30 +53,32 @@ public class Head_Of_Department extends Person {
 					System.out.println("Input course name doesn't exists");
 
 			}
-		}
+		
 	}
 
 	public boolean head_option() {
 		int menu_option;
-		System.out.println("**********Head Of Department Options**********");
-		System.out.println("1. handle with tranfer_credits applications\n" + "2. logout");
-		try (Scanner sc = new Scanner(System.in)) {
+		Scanner sc = new Scanner(System.in);
 			while (true) {
-				System.out.print("Insert option: ");
-				menu_option = sc.nextInt();
-				if (menu_option >= 1 && menu_option <= 2)
+				System.out.println("**********Head Of Department Options**********");
+				System.out.println("1. handle with tranfer_credits applications\n" + "2. logout");
+				while (true) {
+					System.out.print("Insert option: ");
+					menu_option = sc.nextInt();
+					if (menu_option >= 1 && menu_option <= 2)
+						break;
+					System.out.println("Wrong input\n");
+				}
+
+				switch (menu_option) {
+				case 1:
+					handle_transfercredits_apply();
 					break;
-				System.out.println("Wrong input\n");
+				case 2:
+					sc.close();
+					return true;
+				}
 			}
-			
-			switch (menu_option) {
-			case 1:
-				handle_transfercredits_apply();
-			case 2:
-				logout();
-			}
-			return false;
-		}
 	}
 
 }
