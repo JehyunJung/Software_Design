@@ -8,7 +8,4 @@ public class Person{
 		this.name=name;
 		this.number=number;
 	}
-	public static boolean logout() {
-		return false;
-	}
 }

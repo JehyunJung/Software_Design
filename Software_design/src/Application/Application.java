@@ -1,10 +1,20 @@
 package Application;
 
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import Bulletin.Bulletin;
+import Bulletin.Dispatch_Record;
 import Person.*;
+import Status.Status;
+
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -36,70 +46,220 @@ class Information_class implements Serializable{
 		System.out.println(score);
 	}
 }
-public class Application {
+
+public class Application { 
 	public static void main(String[] args) {
-		System.out.println("**********Login Section***********");
-		 
-		if (!login()) {
-			System.out.println("System off~~");
-			return;
-		}
 		
-		
-
+		login();
+		//makeCOURSE_DB();
+		//makeLOGIN_DB();
+		//setSTATUS_DB();
+		//setBULLETIN_DB();
+		//setDISPATCH_RECORD_DB();
 	}
+	public static void setSTATUS_DB() {
+		try(ObjectOutputStream oo= new ObjectOutputStream(new FileOutputStream("STATUS.bin"))) {
+				oo.writeObject(new Status(null, null, 5, 0, 0, null));
+				oo.writeObject(null);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void setBULLETIN_DB() {
+		try(ObjectOutputStream oo= new ObjectOutputStream(new FileOutputStream("BULLETIN.bin"))) {
+				oo.writeObject(null);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void setDISPATCH_RECORD_DB() {
+		try(ObjectOutputStream oo= new ObjectOutputStream(new FileOutputStream("DISPATCH_RECORD.bin"))) {
+			int f;
+			Scanner sc = new Scanner(System.in);
+			
+			System.out.println("SET DATA ? (0 -> no) ");
+			f= sc.nextInt();
+			
+			if(f== 0){	
+				oo.writeObject(null);
+				return;
+			}
 
-	public static boolean login() {
-		String ID, PW;
-		boolean find_flag = false;
+			while (true) {
+				System.out.print("EX coll name ?  ");
+				String coll_name = sc.next(); // college name
+				if (coll_name.equals("quit"))
+					break;
+				System.out.print("EX  period   ?  ");
+				String period = sc.next(); // exchange student period
+				System.out.print("EX major     ? ");
+				String major = sc.next(); // exchange student major
+
+				oo.writeObject(new Dispatch_Record(coll_name, period, major));
+			}			
+			oo.writeObject(null);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void makeCOURSE_DB() {
+		LinkedList<String/* classTYPE */> list = new LinkedList<>();
+
+		/* class Fields */
+		String corName;
+		/* class Fields */
+
 		Scanner sc = new Scanner(System.in);
 
+		try (BufferedWriter fw = new BufferedWriter(new FileWriter("COURSE.txt"))) {
+			while (true) {
+				/* input data */
+				System.out.print(" INPUT REGISETER COURSE NAME  : ");
+				corName = sc.next();
+				if (corName.equals("quit"))
+					break;
+
+				/* add to list */
+				list.add(corName);
+			}
+			/* write to file */
+			for (String b : list) {
+				fw.write(b, 0, b.length());
+				fw.newLine();
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void makeLOGIN_DB()
+	{
+	   LinkedList<Information_class/*classTYPE*/> list = new LinkedList<>();
+	   
+	   /*class Fields*/
+	   String ID;
+	   String PW;
+	   int type;
+	   String name;
+	   String num;
+	   String score;
+	   /*class Fields*/
+	   
+	   Scanner sc = new Scanner(System.in);
+
+	   try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("LOGIN.bin"/*filename*/))) {
+	      // first status data is used to represent the step
+
+	      while (true) {
+	         /*input data*/
+	         System.out.print(" INPUT REGISETER ID    : ");
+	         ID = sc.next();
+	         if (ID.equals("quit"))         break;
+	         System.out.print(" INPUT REGISETER PSWRD : ");
+	         PW = sc.next();
+	         System.out.print(" INPUT REGISETER TYPE  : ");
+	         type = sc.nextInt();         
+	         sc.next();
+	         System.out.print(" INPUT REGISETER NAME  : ");
+	         name = sc.next();         
+	         System.out.print(" INPUT REGISETER NUM   : ");
+	         num = sc.next();
+	         System.out.print(" INPUT REGISETER SCORE : ");
+	         score = sc.next();
+	         
+	         
+	         /*add to list*/
+	         Information_class temp = new Information_class(ID, PW, type, name, num, score);
+	         list.add(temp);
+	      }
+	      /*write to file*/
+	      for(Information_class b : list){
+	         oo.writeObject(b);
+	      }
+	      oo.writeObject(null);
+	   } 
+	   catch (IOException e) {
+	      e.printStackTrace();
+	   }
+	   
+
+	}
+	
+	
+	public static void login() throws NoSuchElementException{
+		String ID, PW;
+		boolean find_flag = false;
+		boolean logout_flag=false;
+		int count=0;
+		String c;
+		Scanner sc=new Scanner(System.in);
+		
+		System.out.println("STATUS ( STEP : " + Status.step + ")" );
+		
 		while (true) {
+			for(int i=0;i<10;i++)
+				System.out.println();
+			System.out.println("**********Login Section***********");
 			System.out.println("If you want to quit login insert 'quit'");
 			System.out.println("Input ID : ");
 			ID = sc.next();
 			if (ID.equals("quit")) {
-				sc.close();
-				return false;
+				System.out.println("System off~");
+				return;
 			}
 
 			System.out.println("Input PW : ");
 			PW = sc.next();
 			if (PW.equals("quit")) {
-				sc.close();
-				return false;
+				System.out.println("System off~");
+				return;
 			}
-				
 
+			logout_flag=false;
+			find_flag = false;
 			try (ObjectInputStream oi = new ObjectInputStream(
-					new BufferedInputStream(new FileInputStream("LOGIN_DB.bin")))) {
+					new BufferedInputStream(new FileInputStream("LOGIN.bin")))) {
 
 				while (true) {
 					Information_class info = (Information_class) oi.readObject();
-					if (info == null)
+					if (info == null) {
+						if(count==0)
+							return;
 						break;
+					}
+					count++;
 
 					if (ID.equals(info.ID)) {
+						find_flag=true;
 						if (PW.equals(info.PW)) {
 							System.out.println("Login successed");
-							find_flag = true;
 							switch (info.type) {
 							case 0:
 								Student student = new Student(info.name, info.num, info.score);
-								student.student_option();
+								if(student.student_option())
+									logout_flag=true;
 								break;
 							case 1:
 								Manager manager = new Manager(info.name, info.num);
-								manager.manager_option();
+								if(manager.manager_option())
+									logout_flag=true;
 								break;
 							case 2:
 								Head_Of_Department head = new Head_Of_Department(info.name, info.num);
-								head.head_option();
+								if(head.head_option())
+									logout_flag=true;
 								break;
 							}
-							sc.close();
-							return true;
-						} else {
+						} 
+						else {
 							System.out.println("Password is wrong\n");
 							break;
 						}
@@ -108,6 +268,10 @@ public class Application {
 				}
 				if (find_flag == false) {
 					System.out.println("ID doesn't exists");
+					continue;
+				}
+				if(find_flag==true && logout_flag==true) {
+					System.out.println("You pressed logout");
 					continue;
 				}
 			}
@@ -119,7 +283,4 @@ public class Application {
 
 	}
 
-	public static void logout() {
-		login();
-	}
 }

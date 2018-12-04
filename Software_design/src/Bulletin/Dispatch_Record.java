@@ -1,18 +1,25 @@
 package Bulletin;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class Dispatch_Record{
+public class Dispatch_Record implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String coll_name;			//college name
 	String period;				//exchange student period
 	String major;				//exchange student major
+	public static int count=0;
 	public static boolean sort_flag=false;		//checking for sorting repitition
 	public static LinkedList<Dispatch_Record> dispatch_record=new LinkedList<>();	//Linkedlist of Dispatch
 	public Dispatch_Record(String c_name, String period, String major) {
@@ -43,59 +50,57 @@ public class Dispatch_Record{
 	
 	public static void upload() { // Upload Dispatch data to DB
 		Iterator<Dispatch_Record> itr=dispatch_record.iterator();
-		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("Dispatch_Record.bin"))) {
+		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("DISPATCH_RECORD.bin"))) {
 			//upload the Dispatch_Record data from list to DB
 			while(itr.hasNext())
 				oo.writeObject(itr.next());
+			oo.writeObject(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 
-	public static void download() { // Download Dispatch from DB with Student ID
+	public static boolean download() { // Download Dispatch from DB with Student ID
 		Dispatch_Record.dispatch_record.clear();
-		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Dispatch_Record.bin"))) {
-			//download the Dispatch_Record data from DB to list
+		
+		try {
+			FileInputStream fin = new FileInputStream("DISPATCH_RECORD.bin");
+			
+			try {
+				int c=fin.read();
+				if (c== -1) {
+					//System.out.println("FXXk");
+					fin.close();
+					return false;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("DISPATCH_RECORD.bin"))) {
+			// download the Dispatch_Record data from DB to list
 			while (true) {
-				Dispatch_Record mytemp=(Dispatch_Record)oi.readObject();
+				Dispatch_Record mytemp = (Dispatch_Record) oi.readObject();
 				if (mytemp == null)
 					break;
 				Dispatch_Record.dispatch_record.add(mytemp);
 			}
+			return true;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-		} 
-	}
-	public void sort() {
-		int num;
-		System.out.println("**********Input Sorting options**********");
-		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to quit");
-		try(Scanner sc=new Scanner(System.in)){
-			num=sc.nextInt();
+			return false;
 		}
-		switch(num) {
-		case -1:
-			return;
-		case 1:
-			dispatch_record.sort((d1,d2)->d1.get_coll_name().compareTo(d2.get_coll_name()));
-			break;
-		case 2:
-			dispatch_record.sort((d1,d2)->d1.get_period().compareTo(d2.get_period()));
-			break;
-		case 3:
-			dispatch_record.sort((d1,d2)->d1.get_major().compareTo(d2.get_major()));
-			break;
-		}
-		
+
 	}
-	
+
 	public void show_info() {
-		if(Dispatch_Record.sort_flag!=true) {
-			sort();
-			Dispatch_Record.sort_flag=true;
-		}
-	
 		System.out.print("College_name: " + coll_name);		//print college name
 		System.out.print("\tPeriod: " + period);			//print exchange student period
 		System.out.println("\tMajor: " + major);				//print exchange student major

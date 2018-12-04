@@ -1,25 +1,28 @@
 package Bulletin;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Collections;
-import java.util.Comparator;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 // Bulletin package
-public class Bulletin  {
+public class Bulletin implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String bull_name;			//bulletin name
 	String coll_name;			//college name
 	String country;				//country
 	String period;				//exchange student period
 	String major;				//exchange student major
 	String req_score;			//required score
-	public static boolean sort_flag=false;	//for checking sorting repitition
 	public static LinkedList<Bulletin> bulletin=new LinkedList<>();	//static linkedlist of Bulletin
 	public Bulletin(String bull_name,String col_name, String country,  String period, String major,String req_score) {
 		this.bull_name=bull_name;
@@ -65,38 +68,67 @@ public class Bulletin  {
 	
 	
 	public static void upload() { // Upload Bulletin data to DB
-		Iterator<Bulletin> itr=bulletin.iterator();
-		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("Bulletin.bin"))) {
-			//upload the Bulletin data from list to DB
-			while(itr.hasNext())
+		Iterator<Bulletin> itr = bulletin.iterator();
+		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("BULLETIN.bin"))) {
+			// upload the Bulletin data from list to DB
+			while (itr.hasNext())
 				oo.writeObject(itr.next());
+			oo.writeObject(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 
-	public static void download() { // Download Bulletin from DB with Student ID
+	public static boolean download() { // Download Bulletin from DB with Student ID
 		Bulletin.bulletin.clear();
-		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Bulletin.bin"))) {
+		
+		try {
+			FileInputStream fin = new FileInputStream("BULLETIN.bin");
+			
+			try {
+				int c=fin.read();
+				if (c == -1) {
+					//System.out.println("FXXk");
+					fin.close();
+					return false;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			//System.out.println("FXXk! ");
+			e1.printStackTrace();
+		}
+		
+		
+		
+		// --- if data exist ---
+		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("BULLETIN.bin"))) {
 			//download the Bulletin data from DB to list
 			while (true) {
 				Bulletin mytemp=(Bulletin)oi.readObject();
 				if (mytemp == null)
-					break;
+					return false;
 				Bulletin.bulletin.add(mytemp);
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
+			return false;
 		} 
+		
 	}
 	public void sort() {
 		int num;
 		System.out.println("**********Input Sorting options**********");
 		System.out.println("1. By bulletin_name\t2. By college_name\t3. By_country\t4.By_period\t5.By_required_score\n Input -1 to quit");
-		try(Scanner sc=new Scanner(System.in)){
+		Scanner sc=new Scanner(System.in);
 			num=sc.nextInt();
-		}
+		
 		switch(num) {
 		case -1:
 			return;
@@ -120,12 +152,9 @@ public class Bulletin  {
 	}
 	
 	public void show_info() {
-		if(Bulletin.sort_flag!=true) {
-			sort();
-			Bulletin.sort_flag=true;
-		}
+		
 		System.out.print("Bull_name: " + bull_name);		//print the name of bulletin board;
-		System.out.print("College_name: " + coll_name);		//print the name of exchange school
+		System.out.print("\tCollege_name: " + coll_name);		//print the name of exchange school
 		System.out.print("\tCountry: " + country);			//print the country of exchange school
 		System.out.print("\tPeriod: " + period );			//print the period of exchange school
 		System.out.print("\tMajor: " + major);				//print exchange student major
