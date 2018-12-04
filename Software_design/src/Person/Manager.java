@@ -1,5 +1,6 @@
 package Person;
 
+import java.io.IOException;
 import java.util.ListIterator;
 import java.util.Scanner;
 
@@ -226,6 +227,10 @@ public class Manager extends Person { // faculty class
 
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_first_apply' quit");
+					
+					for(Status b : Status.status) 
+						if(b.getStat1() != 2) b.first_modify(3);
+					
 					Status.step=2;// 2->first apply period
 					Status.upload();
 					return true;
@@ -272,6 +277,10 @@ public class Manager extends Person { // faculty class
 
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_final_apply' quit");
+					
+					for(Status b : Status.status) 
+						if(b.getStat2() != 2) b.second_modify(3);
+					
 					Status.step = 3;
 					Status.upload();
 					return true;
@@ -320,9 +329,15 @@ public class Manager extends Person { // faculty class
 
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_transfercredit_apply' quit");
-					Status.upload();
+					
+					for(Status b : Status.status) 
+						if(b.getStat3() != 2) b.final_modify(3);
+					
 					Status.step = 5;
+					Status.upload();
 					dispatch_add();
+					
+					
 					return true;
 				}
 				for (Status s : Status.status) {
@@ -375,7 +390,7 @@ public class Manager extends Person { // faculty class
 		sort_Dispatch();
 		Scanner sc = new Scanner(System.in);
 			while (true) {
-				System.out.println("Input dispatch record period you want");
+				System.out.print("Input dispatch record period you want");
 				System.out.println("ex) 2018_1");
 				System.out.println("If you want to quit, Input quit");
 				a = sc.next();
@@ -404,6 +419,7 @@ public class Manager extends Person { // faculty class
 	public boolean manager_option() {
 		int menu_option;
 		Scanner sc = new Scanner(System.in);
+	
 			while (true) {
 				System.out.println("**********Manager Options**********");
 				System.out.println("1. print Bull\n" + "2. post bull\n" + "3. delete bull\n" + "4. handle_first_apply\n"

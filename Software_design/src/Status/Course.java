@@ -11,6 +11,7 @@ public class Course implements Serializable {
 	boolean major_stat; // if the student ask for approval for major then this value becomes 1
 	boolean major; // if the course is related to major , then this value becomes 1
 	char score; // studens's course score
+	public static int count = -1;
 
 	public Course(String name) {
 		this.Course_name=name;
@@ -54,7 +55,9 @@ public class Course implements Serializable {
 		major_stat = b;
 	}
 	public void see_applied_course() {
+		++count;
 		if(this.major_stat && !this.major)
-			System.out.println("Course_name: " + Course_name);
-	}	
+			System.out.println("\t"+count +".\t"+ "Course_name: " + Course_name);
+	}
+	
 }

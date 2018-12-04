@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import Bulletin.Bulletin;
+import Bulletin.Dispatch_Record;
 import Person.*;
 import Status.Status;
 
@@ -77,7 +78,30 @@ public class Application {
 	
 	public static void setDISPATCH_RECORD_DB() {
 		try(ObjectOutputStream oo= new ObjectOutputStream(new FileOutputStream("DISPATCH_RECORD.bin"))) {
+			int f;
+			Scanner sc = new Scanner(System.in);
+			
+			System.out.println("SET DATA ? (0 -> no) ");
+			f= sc.nextInt();
+			
+			if(f== 0){	
 				oo.writeObject(null);
+				return;
+			}
+
+			while (true) {
+				System.out.print("EX coll name ?  ");
+				String coll_name = sc.next(); // college name
+				if (coll_name.equals("quit"))
+					break;
+				System.out.print("EX  period   ?  ");
+				String period = sc.next(); // exchange student period
+				System.out.print("EX major     ? ");
+				String major = sc.next(); // exchange student major
+
+				oo.writeObject(new Dispatch_Record(coll_name, period, major));
+			}			
+			oo.writeObject(null);
 		}
 		catch(IOException e) {
 			e.printStackTrace();

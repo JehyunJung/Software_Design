@@ -1,5 +1,6 @@
 package Person;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -24,10 +25,6 @@ public class Student extends Person {
 		
 		if(Status.download() == false) {
 			System.out.println("Status not found ");
-			return;
-		}
-		if(!Status.first_application_check() && !Status.final_application_check() && !Status.transfer_credit_application_check()) {
-			System.out.println("Not appropriate step");
 			return;
 		}
 		
@@ -125,6 +122,12 @@ public class Student extends Person {
 			return;
 		}
 		
+		if(!Status.first_application_check() && !Status.final_application_check()) {
+			System.out.println("Not appropriate step");
+			Status.upload();
+			return;
+		}
+		
 		
 		Scanner sc = new Scanner(System.in);
 
@@ -136,11 +139,7 @@ public class Student extends Person {
 			}
 		
 
-		if(!Status.first_application_check() && !Status.final_application_check()) {
-			System.out.println("Not appropriate step");
-			Status.upload();
-			return;
-		}
+		
 		ListIterator<Status> itr=Status.status.listIterator();
 		while(itr.hasNext()) {
 			if(this.getNumber().equals(itr.next().getNumber())) {
@@ -160,13 +159,14 @@ public class Student extends Person {
 	public boolean firstapply() { // see applicable Bulletin and apply
 		int length, select;
 		String quitOption;
-		
-		if( Status.download() == false && Student.count != 0 ) {
+
+		if (Status.download() == false && Student.count != 0) {
 			System.out.println("Status not found ");
 			return false;
-		}count++;
-		
-		for(Status s: Status.status) {
+		}
+		count++;
+
+		for (Status s : Status.status) {
 			if (number.equals(s.getNumber())) {
 				if (s.getStat1() == 1) {
 					System.out.println("Already Applied");
@@ -175,44 +175,32 @@ public class Student extends Person {
 				continue;
 			}
 		}
-		if (Status.first_application_check() == false)
-		{
+		if (Status.first_application_check() == false) {
 			System.out.println("It is not the period for first apply ");
 			return false;
 		}
-		
-		
+
 		Scanner sc = new Scanner(System.in);
 
-			System.out.println("Input quit to Quit(Otherwise press any key to continue)");
-			quitOption = sc.next();
-			if (quitOption.equals("quit")) {
-				Status.upload();
-				return true;
-			}
-
-			length = see_Applicable_bull(); // from 'applicable bulletin : database'
-			System.out.println(length);// read until EOF, and measure the database length
-			
-			Bulletin.download();
-			System.out.print("Input Bull you apply : ");
-			select =sc.nextInt();
-			if (select < 0 || select > length) {
-				return false; // Select val. error catch-> do - while until proper val.
-			}
-			/*Bulletin.download();
-			System.out.print("Input Bull you apply : ");
-			select =sc.nextInt();*/
-			
-			// apply selected one , set step = 1
-			
-			//System.out.println("selected bull : " );
-			//Bulletin.bulletin.get(select).show_info();
-			
-			Status.add_status_to_list(name, number, 1, 0, 0, Bulletin.bulletin.get(select));
-			System.out.println(Bulletin.bulletin.get(select).get_bull_name());
-			
+		Bulletin.download();
+		length = see_Applicable_bull(); // from 'applicable bulletin : database'
 		
+		System.out.println("Input quit to Quit(Otherwise press any key to continue)");
+		quitOption = sc.next();
+		if (quitOption.equals("quit")) {
+			Status.upload();
+			return true;
+		}
+
+		System.out.print("Input Bull you apply : ");
+		select = sc.nextInt();
+		if (select < 0 || select > length) {
+			return false; // Select val. error catch-> do - while until proper val.
+		}
+
+		Status.add_status_to_list(name, number, 1, 0, 0, Bulletin.bulletin.get(select));
+		System.out.println(Bulletin.bulletin.get(select).get_bull_name());
+
 		Status.upload();
 		return true;
 	}
@@ -325,7 +313,7 @@ public class Student extends Person {
 				}
 				else {
 					System.out.println("Can't apply for transfer credit, Your Course_count(excluding F) is less than 4");
-					b.final_modify(3);
+					b.final_modify(0);
 				}
 				break;
 			}
@@ -371,84 +359,84 @@ public class Student extends Person {
 	}
 
 	public boolean major_apply() {
+		
 		Boolean find_flag1, find_flag2;
-		String quitOption, course_name;
+		String quitOption;
+		String corNum;
 		LinkedList<Course> course = new LinkedList<>();
-		if(Status.download() == false) {
+		int count=-1;
+		
+		
+		if (Status.download() == false) {
 			System.out.println("Status not found ");
 			return false;
 		}
-		if (Status.transfer_credit_application_check() == false)
-		{
+		if (Status.transfer_credit_application_check() == false) {
 			System.out.println("It is not the period for transfer_credit apply ");
-			
+
 			return false;
 		}
-		
-	
-		
-	
-		
+
 		Scanner sc = new Scanner(System.in);
 
-			find_flag1 = false;
-			System.out.println("If you want to quit, Input quit(Otherwise press any key to continue)");
-			quitOption = sc.next();
+		find_flag1 = false;
+		System.out.println("If you want to quit, Input quit(Otherwise press any key to continue)");
+		quitOption = sc.next();
 
-			if (quitOption.equals("quit")) {
-				Status.upload();
-				return true;
-			}
+		if (quitOption.equals("quit")) {
+			Status.upload();
+			return true;
+		}
 
-			for (Status s : Status.status) {
-				if (number.equals(s.getNumber())) {
-					find_flag1 = true;
-					course = s.getCourse();
-				} else
-					continue;
-				
-				if (find_flag1) {
-					while (true) {
-						System.out.println("**********" + number + "'s course list**********");
-						for (Course c : course) {
-							if(c.get_major_stat()==false)
-								System.out.println(c.getName());
+		for (Status s : Status.status) {
+			if (number.equals(s.getNumber())) {
+				find_flag1 = true;
+				course = s.getCourse();
+			} else
+				continue;
+
+			if (find_flag1) {
+				while (true) {
+					System.out.println("**********" + number + "'s course list**********");
+					for (Course c : course) {
+						++count;
+						if (c.get_major_stat() == false)
+						{
+							System.out.println( "\t" + count + "\t" +  c.getName());
+							
 						}
-						find_flag2 = false;
-						System.out.println("Input course name to apply for major_change ");
-						System.out.println("If you want to quit, Input quit");
-						course_name = sc.next();
-
-						if (course_name.equals("quit")) {
-							System.out.println("'transfer credit course name' quit");
-							s.setCourse(course);
-							Status.upload();
-							return true;
-						}
-
-						for (Course c : course) {
-							if (course_name.equals(c.getName())) {
-								c.set_major_stat(true);
-								find_flag2 = true;
-								break;
-							}
-						}
-						s.setCourse(course);
-						if (find_flag2)
-							continue;
-						System.out.println("input course name does not exist");
 					}
+					find_flag2 = false;
+					System.out.println("Input course index to apply for major_change ");
+					System.out.println("If you want to quit, Input quit");
+					corNum = sc.next();
+
+					if (corNum.equals("quit")) {
+						System.out.println("'transfer credit course name' quit");
+						s.setCourse(course);
+						Status.upload();
+						return true;
+					}
+					
+					course.get(Integer.parseInt(corNum)).set_major_stat(true);
+					s.setCourse(course);
+					
+					if (find_flag2)
+						continue;
+					System.out.println("input course name does not exist");
 				}
 			}
-			Status.upload();
-			return false;
-		
+		}
+		Status.upload();
+		return false;
+
 	}
 
 
 	public boolean student_option()throws NoSuchElementException {
 		int menu_option;
 		Scanner sc = new Scanner(System.in);
+		
 		while (true) {
 			System.out.println("**********Student Options**********");
 			System.out.println("1. search for student's current status\n" + "2. print appliable Bulletin and apply\n"

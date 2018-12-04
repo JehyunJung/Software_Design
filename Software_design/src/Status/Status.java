@@ -118,35 +118,31 @@ public class Status implements Serializable {
 	}
 
 	public void show_first_applicant_info() {
-		if(first_stat==1 || first_stat==3) {
+		if(first_stat==1 ) {
 			System.out.print("\tStudent name: " + stu_name);
 			System.out.println("\t Student number: " + stu_num);
 			for(Document d:document)
 				d.show_info();
-			first_stat=3;
 		}
 	}
 	public void show_final_applicant_info() {
-		if(final_stat==1 || final_stat==3) {
+		if(final_stat==1 ) {
 			System.out.print("\tStudent name: " + stu_name);
 			System.out.println("\t Student number: " + stu_num);
-			final_stat=3;
 		}
 	}
 	public void show_transfercredit_applicant_info() {
-		if(transfer_stat==1 || transfer_stat==3) {
+		if(transfer_stat==1) {
 			System.out.print("\tStudent name: " + stu_name);
 			System.out.println("\t Student number: " + stu_num);
-			transfer_stat=3;
 		}
-		transfer_stat=3;
 	}
 	
 	public void show_info() { // print status
-		if(first_stat==3 || final_stat==3 || transfer_stat==3) {
+/*		if(first_stat==3 || final_stat==3 || transfer_stat==3) {
 			System.out.println("You have failed to exchange school program... SORRY~~");
 			return;
-		}
+		}*/
 		System.out.print("Step: " + Status.step);
 		System.out.print("\tFirst Stat: " + first_stat);
 		System.out.print("\tSecond Stat: " + final_stat);

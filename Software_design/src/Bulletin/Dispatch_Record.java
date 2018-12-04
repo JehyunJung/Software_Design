@@ -6,11 +6,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class Dispatch_Record{
+public class Dispatch_Record implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String coll_name;			//college name
 	String period;				//exchange student period
 	String major;				//exchange student major
@@ -45,7 +50,7 @@ public class Dispatch_Record{
 	
 	public static void upload() { // Upload Dispatch data to DB
 		Iterator<Dispatch_Record> itr=dispatch_record.iterator();
-		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("Dispatch_Record.bin"))) {
+		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("DISPATCH_RECORD.bin"))) {
 			//upload the Dispatch_Record data from list to DB
 			while(itr.hasNext())
 				oo.writeObject(itr.next());
@@ -60,7 +65,7 @@ public class Dispatch_Record{
 		Dispatch_Record.dispatch_record.clear();
 		
 		try {
-			FileInputStream fin = new FileInputStream("Dispatch_Record.bin");
+			FileInputStream fin = new FileInputStream("DISPATCH_RECORD.bin");
 			
 			try {
 				int c=fin.read();
@@ -79,7 +84,7 @@ public class Dispatch_Record{
 		}
 		
 		
-		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Dispatch_Record.bin"))) {
+		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("DISPATCH_RECORD.bin"))) {
 			// download the Dispatch_Record data from DB to list
 			while (true) {
 				Dispatch_Record mytemp = (Dispatch_Record) oi.readObject();

@@ -1,6 +1,8 @@
 package Person;
 import Status.*;
 
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Head_Of_Department extends Person {
@@ -8,8 +10,11 @@ public class Head_Of_Department extends Person {
 		super(name, number);
 	}
 
-	public boolean handle_transfercredits_apply() { // handle with tranfer_credits applications
-		String course_name;
+	public boolean handle_major_apply() { // handle with tranfer_credits applications
+		String corNum;
+		String corName;
+		LinkedList<String> courseNameList = new LinkedList<>();
+		
 		boolean find_flag=false; // find_flag for course_name check
 		Scanner sc = new Scanner(System.in);
 		if(Status.download() == false) {
@@ -25,24 +30,32 @@ public class Head_Of_Department extends Person {
 			while (true) {
 				System.out.println("**********Major applied course***********");
 				for (Status s : Status.status) {
+					Course.count = 0;
 					for (Course c : s.getCourse())
+					{
+						courseNameList.add(c.getName());
 						if(c.get_major()==false)
-							c.see_applied_course();
+							c.see_applied_course(); // Course.count increases
+					}
 				}
 
-				System.out.println("Input transfer credit name");
+				System.out.println("Input major course index ");
 				System.out.println("If you want to quit, Input quit");
-				course_name = sc.next();
+				corNum = sc.next();
 
-				if (course_name.equals("quit")) {
-					System.out.println("'transfer credit course' quit");
+				if (corNum.equals("quit")) {
+					System.out.println("'handle major apply' quit");
 					Status.upload();
 					return true;
 				}
+				
 				find_flag=false;
+				corName = courseNameList.get(Integer.parseInt(corNum));
+				System.out.println("INPUTTED COURSE NAME IS " + corName);
+				
 				for (Status b : Status.status) {
 					for (Course c : b.getCourse()) {
-						if (course_name.equals(c.getName()) && c.get_major_stat() == true && c.get_major() != true) {
+						if (corNum.equals(c.getName()) && c.get_major_stat() == true && c.get_major() != true) {
 							c.set_major(true);
 							find_flag = true;
 						}
@@ -59,9 +72,10 @@ public class Head_Of_Department extends Person {
 	public boolean head_option() {
 		int menu_option;
 		Scanner sc = new Scanner(System.in);
+	
 			while (true) {
 				System.out.println("**********Head Of Department Options**********");
-				System.out.println("1. handle with tranfer_credits applications\n" + "2. logout");
+				System.out.println("1. handle major applications\n" + "2. logout");
 				while (true) {
 					System.out.print("Insert option: ");
 					menu_option = sc.nextInt();
@@ -72,7 +86,7 @@ public class Head_Of_Department extends Person {
 
 				switch (menu_option) {
 				case 1:
-					handle_transfercredits_apply();
+					handle_major_apply();
 					break;
 				case 2:
 					return true;
