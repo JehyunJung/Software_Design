@@ -1,7 +1,12 @@
 package Status;
 
+import java.io.Serializable;
 import java.security.SecureRandom;
-public class Course {
+public class Course implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String Course_name; // course name
 	boolean major_stat; // if the student ask for approval for major then this value becomes 1
 	boolean major; // if the course is related to major , then this value becomes 1

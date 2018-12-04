@@ -2,13 +2,15 @@ package Person;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import Bulletin.*;
 import Status.*;
 
 public class Student extends Person {
 	String score;
-	LinkedList<Document> document=new LinkedList<>();
+	int doc_count=0;
+	static int count =0;
 	
 	public String getNumber() {
 		return this.number;
@@ -30,10 +32,15 @@ public class Student extends Person {
 		}
 		
 		
+		
 		for(Status b : Status.status)
 			if(this.number.equals(b.getNumber()))
 			{
 				b.show_info();
+				System.out.println("Document List");
+				for (Document d : b.getDocument()) {
+					d.show_info();
+				}
 				return;
 			}
 		
@@ -42,6 +49,7 @@ public class Student extends Person {
 	}
 
 	public void register_document() { // register document
+		LinkedList<Document> document=new LinkedList<>();
 		String col_name=null;
 		String doc_type;
 		int findFlag = 0;
@@ -56,6 +64,7 @@ public class Student extends Person {
 			System.out.println("It is not the period for first apply ");
 			return;
 		}
+		
 			
 		
 		
@@ -85,17 +94,27 @@ public class Student extends Person {
 		// student status exist / step : 1 / student's stat1 : 1
 		Scanner sc = new Scanner(System.in);
 			System.out.println("Please input the type of document\n" + "otherwise input quit to Quit");
-			doc_type=sc.nextLine();
+			doc_type=sc.next();
 			
 			if(doc_type.equals("quit")){
 				Status.upload();
-				sc.close();
 				return;
 			}
-			document.add(new Document(name,number,col_name,doc_type));
-		
+			for(Status s: Status.status)
+			{
+				if(number.equals(s.getNumber())) {
+					Document temp=new Document(name,number,col_name,doc_type);
+					if(doc_count==0) {
+						doc_count++;
+						document.add(temp);
+						s.setDocument(document);
+					}
+					else
+						s.addDocument(temp);
+				}
+			}
+			
 		Status.upload();
-		sc.close();
 	}
 
 
@@ -110,10 +129,9 @@ public class Student extends Person {
 		Scanner sc = new Scanner(System.in);
 
 			System.out.println("Input quit to quit cancel_apply");
-			quitOption = sc.nextLine();
+			quitOption = sc.next();
 			if (quitOption.equals("quit")) {
 				Status.upload();
-				sc.close();
 				return;
 			}
 		
@@ -121,7 +139,6 @@ public class Student extends Person {
 		if(!Status.first_application_check() && !Status.final_application_check()) {
 			System.out.println("Not appropriate step");
 			Status.upload();
-			sc.close();
 			return;
 		}
 		ListIterator<Status> itr=Status.status.listIterator();
@@ -129,11 +146,11 @@ public class Student extends Person {
 			if(this.getNumber().equals(itr.next().getNumber())) {
 				itr.remove();
 				Status.upload();
-				sc.close();
+				System.out.println("You have the canceled the application");
 				return;
 			}		
 		}
-		sc.close();
+
 		Status.upload();
 		System.out.println("You have not applied for exchange student");
 		return;
@@ -143,9 +160,20 @@ public class Student extends Person {
 	public boolean firstapply() { // see applicable Bulletin and apply
 		int length, select;
 		String quitOption;
-		if(Status.download() == false) {
+		
+		if( Status.download() == false && Student.count != 0 ) {
 			System.out.println("Status not found ");
 			return false;
+		}count++;
+		
+		for(Status s: Status.status) {
+			if (number.equals(s.getNumber())) {
+				if (s.getStat1() == 1) {
+					System.out.println("Already Applied");
+					return false;
+				}
+				continue;
+			}
 		}
 		if (Status.first_application_check() == false)
 		{
@@ -157,36 +185,46 @@ public class Student extends Person {
 		Scanner sc = new Scanner(System.in);
 
 			System.out.println("Input quit to Quit");
-			quitOption = sc.nextLine();
+			quitOption = sc.next();
 			if (quitOption.equals("quit")) {
 				Status.upload();
-				sc.close();
 				return true;
 			}
 
 			length = see_Applicable_bull(); // from 'applicable bulletin : database'
-			// read until EOF, and measure the database length
-			select = sc.nextInt();
-			if (select <= 0 || select > length) {
-				sc.close();
+			System.out.println(length);// read until EOF, and measure the database length
+			
+			Bulletin.download();
+			System.out.print("Input Bull you apply : ");
+			select =sc.nextInt();
+			if (select < 0 || select > length) {
 				return false; // Select val. error catch-> do - while until proper val.
 			}
-	
+			/*Bulletin.download();
+			System.out.print("Input Bull you apply : ");
+			select =sc.nextInt();*/
+			
 			// apply selected one , set step = 1
+			
+			//System.out.println("selected bull : " );
+			//Bulletin.bulletin.get(select).show_info();
+			
 			Status.add_status_to_list(name, number, 1, 0, 0, Bulletin.bulletin.get(select));
+			System.out.println(Bulletin.bulletin.get(select).get_bull_name());
+			
 		
 		Status.upload();
-		sc.close();
 		return true;
 	}
 	
 	public int see_Applicable_bull() {
 		int count = -1;
 		Bulletin.download();
-		
+		System.out.println("郴 己利 : "+score);
 		for(Bulletin b : Bulletin.bulletin){
 			count++; 
-			if (score.compareTo(b.getRequiredScore()) < 0) 
+			System.out.println("鞘夸 己利 : "+b.getRequiredScore());
+			if (score.compareTo(b.getRequiredScore()) <= 0) 
 			{
 				System.out.print(count+"\t");
 				b.show_info();		
@@ -202,32 +240,37 @@ public class Student extends Person {
 			System.out.println("Status not found ");
 			return false;
 		}
+		for(Status s: Status.status) {
+			if (number.equals(s.getNumber())) {
+				if (s.getStat2() == 1) {
+					System.out.println("Already Applied");
+					return false;
+				}
+				continue;
+			}
+		}
 		if (Status.final_application_check() == false)
 		{
 			System.out.println("It is not the period for final apply ");
 			return false;
 		}
 		
-		
-	
-		
-		
+				
 		Scanner sc=new Scanner(System.in);
 			System.out.println("Input quit to Quit");
 			quitOption=sc.nextLine();
 			if(quitOption.equals("quit")) {
 				Status.upload();
-				sc.close();
 				return true;
 			}
 		
 		for(Status b : Status.status)
 			if(this.number.equals(b.getNumber())) {	// my number == b.getnumber , set step -> 2
-				b.second_modify(1);					// after is up to the manager	
+				b.second_modify(1);					// after is up to the manager
+				System.out.println(name + " : applied final apply !");
 				break;
 			}
 		Status.upload();
-		sc.close();
 		return true;
 	}
 	
@@ -238,6 +281,15 @@ public class Student extends Person {
 		if(Status.download() == false) {
 			System.out.println("Status not found ");
 			return false;
+		}
+		for(Status s: Status.status) {
+			if (number.equals(s.getNumber())) {
+				if (s.getStat3() == 1) {
+					System.out.println("Already Applied");
+					return false;
+				}
+				continue;
+			}
 		}
 		if (Status.transfer_credit_application_check() == false)
 		{
@@ -251,10 +303,9 @@ public class Student extends Person {
 
 		Scanner sc=new Scanner(System.in);
 			System.out.println("Input quit to Quit");
-			quitOption=sc.nextLine();
+			quitOption=sc.next();
 			if(quitOption.equals("quit")) {
 				Status.upload();
-				sc.close();
 				return true;
 			}
 		
@@ -270,16 +321,19 @@ public class Student extends Person {
 						break;
 					}
 				}
-				if(find_flag)
+				if(find_flag) {
 					b.final_modify(1);					// after is up to the manager	
-				else
+					System.out.println(b.getName() + " : applied transfer_credit apply !");
+				}
+				else {
 					System.out.println("Can't apply for transfer credit, Your Course_count(excluding F) is less than 4");
+					b.final_modify(3);
+				}
 				break;
 			}
 		}
 		
 		Status.upload();
-		sc.close();
 		return true;
 	
 	}
@@ -318,11 +372,10 @@ public class Student extends Person {
 
 			find_flag1 = false;
 			System.out.println("If you want to quit, Input quit");
-			quitOption = sc.nextLine();
+			quitOption = sc.next();
 
 			if (quitOption.equals("quit")) {
 				Status.upload();
-				sc.close();
 				return true;
 			}
 
@@ -332,22 +385,23 @@ public class Student extends Person {
 					course = s.getCourse();
 				} else
 					continue;
+				
 				if (find_flag1) {
 					while (true) {
 						System.out.println("**********" + number + "'s course list**********");
-						for (Course c : course)
-							System.out.println(c.getName());
-
+						for (Course c : course) {
+							if(c.get_major_stat()==false)
+								System.out.println(c.getName());
+						}
 						find_flag2 = false;
 						System.out.println("Input course name to apply for major_change ");
 						System.out.println("If you want to quit, Input quit");
-						course_name = sc.nextLine();
+						course_name = sc.next();
 
 						if (course_name.equals("quit")) {
 							System.out.println("'transfer credit course name' quit");
 							s.setCourse(course);
 							Status.upload();
-							sc.close();
 							return true;
 						}
 
@@ -358,6 +412,7 @@ public class Student extends Person {
 								break;
 							}
 						}
+						s.setCourse(course);
 						if (find_flag2)
 							continue;
 						System.out.println("input course name does not exist");
@@ -365,13 +420,12 @@ public class Student extends Person {
 				}
 			}
 			Status.upload();
-			sc.close();
 			return false;
 		
 	}
 
 
-	public boolean student_option() {
+	public boolean student_option()throws NoSuchElementException {
 		int menu_option;
 		Scanner sc = new Scanner(System.in);
 		while (true) {
@@ -413,7 +467,6 @@ public class Student extends Person {
 				see_dispatch_record();
 				break;
 			case 9:
-				sc.close();
 				return true;
 			}
 		}

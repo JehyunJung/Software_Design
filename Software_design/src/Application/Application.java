@@ -1,9 +1,15 @@
 package Application;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import Bulletin.Bulletin;
 import Person.*;
+import Status.Status;
+
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -39,65 +45,78 @@ class Information_class implements Serializable{
 		System.out.println(score);
 	}
 }
-public class Application {
+
+public class Application { 
 	public static void main(String[] args) {
 		System.out.println("**********Login Section***********");
 		login();
-		
-		
-		//makeCOURSEDB();
-		//makeLOGINDB();
-		//makeSTATUSDB();
+		//makeCOURSE_DB();
+		//makeLOGIN_DB();
+		//setSTATUS_DB();
+		//setBULLETIN_DB();
+		//setDISPATCH_RECORD_DB();
 	}
-	public static void makeSTATUSDB() {
+	public static void setSTATUS_DB() {
 		try(ObjectOutputStream oo= new ObjectOutputStream(new FileOutputStream("STATUS.bin"))) {
+				oo.writeObject(new Status(null, null, 5, 0, 0, null));
 				oo.writeObject(null);
 		}
 		catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-	public static void makeCOURSEDB() {
-	      LinkedList<String/* classTYPE */> list = new LinkedList<>();
-
-	      /* class Fields */
-	      String corName;
-	      /* class Fields */
-
-	      Scanner sc = new Scanner(System.in);
-	      File file = new File("COURSE.bin");
-	      FileWriter fw=null;
-		try {
-			fw = new FileWriter(file,true);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	         while (true) {
-	            /* input data */
-	            System.out.print(" INPUT REGISETER COURSE NAME  : ");
-	            corName = sc.nextLine();
-	            if (corName.equals("quit"))
-	               break;
-
-	            /* add to list */
-	            list.add(corName);
-	         }
-	         /* write to file */
-	         for (String b : list) {
-	            try {
-					fw.write(b);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	         }
-	      
-
-	      sc.close();
-	   }
 	
-	public static void makeLOGINDB()
+	public static void setBULLETIN_DB() {
+		try(ObjectOutputStream oo= new ObjectOutputStream(new FileOutputStream("BULLETIN.bin"))) {
+				oo.writeObject(null);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void setDISPATCH_RECORD_DB() {
+		try(ObjectOutputStream oo= new ObjectOutputStream(new FileOutputStream("DISPATCH_RECORD.bin"))) {
+				oo.writeObject(null);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void makeCOURSE_DB() {
+		LinkedList<String/* classTYPE */> list = new LinkedList<>();
+
+		/* class Fields */
+		String corName;
+		/* class Fields */
+
+		Scanner sc = new Scanner(System.in);
+
+		try (BufferedWriter fw = new BufferedWriter(new FileWriter("COURSE.txt"))) {
+			while (true) {
+				/* input data */
+				System.out.print(" INPUT REGISETER COURSE NAME  : ");
+				corName = sc.next();
+				if (corName.equals("quit"))
+					break;
+
+				/* add to list */
+				list.add(corName);
+			}
+			/* write to file */
+			for (String b : list) {
+				fw.write(b, 0, b.length());
+				fw.newLine();
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void makeLOGIN_DB()
 	{
 	   LinkedList<Information_class/*classTYPE*/> list = new LinkedList<>();
 	   
@@ -118,19 +137,19 @@ public class Application {
 	      while (true) {
 	         /*input data*/
 	         System.out.print(" INPUT REGISETER ID    : ");
-	         ID = sc.nextLine();
+	         ID = sc.next();
 	         if (ID.equals("quit"))         break;
 	         System.out.print(" INPUT REGISETER PSWRD : ");
-	         PW = sc.nextLine();
+	         PW = sc.next();
 	         System.out.print(" INPUT REGISETER TYPE  : ");
 	         type = sc.nextInt();         
-	         sc.nextLine();
+	         sc.next();
 	         System.out.print(" INPUT REGISETER NAME  : ");
-	         name = sc.nextLine();         
+	         name = sc.next();         
 	         System.out.print(" INPUT REGISETER NUM   : ");
-	         num = sc.nextLine();
+	         num = sc.next();
 	         System.out.print(" INPUT REGISETER SCORE : ");
-	         score = sc.nextLine();
+	         score = sc.next();
 	         
 	         
 	         /*add to list*/
@@ -147,22 +166,25 @@ public class Application {
 	      e.printStackTrace();
 	   }
 	   
-	   sc.close();
+
 	}
 	
-	public static void login() {
+	
+	public static void login() throws NoSuchElementException{
 		String ID, PW;
 		boolean find_flag = false;
 		boolean logout_flag=false;
 		int count=0;
+		String c;
 		Scanner sc=new Scanner(System.in);
+		
+		System.out.println("STATUS ( STEP : " + Status.step + ")" );
+		
 		while (true) {
-	
 			System.out.println("If you want to quit login insert 'quit'");
 			System.out.println("Input ID : ");
 			ID = sc.next();
 			if (ID.equals("quit")) {
-				sc.close();
 				System.out.println("System off~");
 				return;
 			}
@@ -170,7 +192,6 @@ public class Application {
 			System.out.println("Input PW : ");
 			PW = sc.next();
 			if (PW.equals("quit")) {
-				sc.close();
 				System.out.println("System off~");
 				return;
 			}

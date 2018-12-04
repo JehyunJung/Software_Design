@@ -6,19 +6,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 // Bulletin package
-public class Bulletin  {
+public class Bulletin implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String bull_name;			//bulletin name
 	String coll_name;			//college name
 	String country;				//country
 	String period;				//exchange student period
 	String major;				//exchange student major
 	String req_score;			//required score
-	public static boolean sort_flag=false;	//for checking sorting repitition
 	public static LinkedList<Bulletin> bulletin=new LinkedList<>();	//static linkedlist of Bulletin
 	public Bulletin(String bull_name,String col_name, String country,  String period, String major,String req_score) {
 		this.bull_name=bull_name;
@@ -65,7 +69,7 @@ public class Bulletin  {
 	
 	public static void upload() { // Upload Bulletin data to DB
 		Iterator<Bulletin> itr = bulletin.iterator();
-		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("Bulletin.bin"))) {
+		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("BULLETIN.bin"))) {
 			// upload the Bulletin data from list to DB
 			while (itr.hasNext())
 				oo.writeObject(itr.next());
@@ -81,7 +85,7 @@ public class Bulletin  {
 		Bulletin.bulletin.clear();
 		
 		try {
-			FileInputStream fin = new FileInputStream("Bulletin.bin");
+			FileInputStream fin = new FileInputStream("BULLETIN.bin");
 			
 			try {
 				int c=fin.read();
@@ -104,7 +108,7 @@ public class Bulletin  {
 		
 		
 		// --- if data exist ---
-		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("Bulletin.bin"))) {
+		try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream("BULLETIN.bin"))) {
 			//download the Bulletin data from DB to list
 			while (true) {
 				Bulletin mytemp=(Bulletin)oi.readObject();
@@ -127,7 +131,6 @@ public class Bulletin  {
 		
 		switch(num) {
 		case -1:
-			sc.close();
 			return;
 		case 1:
 			bulletin.sort((b1,b2)->b1.get_bull_name().compareTo(b2.get_bull_name()));
@@ -145,17 +148,13 @@ public class Bulletin  {
 			bulletin.sort((b1,b2)->b1.get_req_score().compareTo(b2.get_req_score()));
 			break;
 		}
-		sc.close();
 		
 	}
 	
 	public void show_info() {
-		if(Bulletin.sort_flag!=true) {
-			sort();
-			Bulletin.sort_flag=true;
-		}
+		
 		System.out.print("Bull_name: " + bull_name);		//print the name of bulletin board;
-		System.out.print("College_name: " + coll_name);		//print the name of exchange school
+		System.out.print("\tCollege_name: " + coll_name);		//print the name of exchange school
 		System.out.print("\tCountry: " + country);			//print the country of exchange school
 		System.out.print("\tPeriod: " + period );			//print the period of exchange school
 		System.out.print("\tMajor: " + major);				//print exchange student major

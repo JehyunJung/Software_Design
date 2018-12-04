@@ -102,7 +102,6 @@ public class Dispatch_Record{
 		
 		switch(num) {
 		case -1:
-			sc.close();
 			return;
 		case 1:
 			dispatch_record.sort((d1,d2)->d1.get_coll_name().compareTo(d2.get_coll_name()));
@@ -114,7 +113,6 @@ public class Dispatch_Record{
 			dispatch_record.sort((d1,d2)->d1.get_major().compareTo(d2.get_major()));
 			break;
 		}
-		sc.close();
 	}
 	
 	public void show_info() {

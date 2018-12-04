@@ -14,7 +14,6 @@ public class Head_Of_Department extends Person {
 		Scanner sc = new Scanner(System.in);
 		if(Status.download() == false) {
 			System.out.println("Status not found ");
-			sc.close();
 			return false;
 		}
 		if (Status.transfer_credit_application_check() != true) {
@@ -27,17 +26,17 @@ public class Head_Of_Department extends Person {
 				System.out.println("**********Major applied course***********");
 				for (Status s : Status.status) {
 					for (Course c : s.getCourse())
-						c.see_applied_course();
+						if(c.get_major()==false)
+							c.see_applied_course();
 				}
 
 				System.out.println("Input transfer credit name");
 				System.out.println("If you want to quit, Input quit");
-				course_name = sc.nextLine();
+				course_name = sc.next();
 
 				if (course_name.equals("quit")) {
 					System.out.println("'transfer credit course' quit");
 					Status.upload();
-					sc.close();
 					return true;
 				}
 				find_flag=false;
@@ -48,6 +47,7 @@ public class Head_Of_Department extends Person {
 							find_flag = true;
 						}
 					}
+					b.setCourse(b.getCourse());
 				}
 				if(find_flag!=true) 
 					System.out.println("Input course name doesn't exists");
@@ -75,7 +75,6 @@ public class Head_Of_Department extends Person {
 					handle_transfercredits_apply();
 					break;
 				case 2:
-					sc.close();
 					return true;
 				}
 			}

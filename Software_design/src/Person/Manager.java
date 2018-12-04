@@ -25,22 +25,61 @@ public class Manager extends Person { // faculty class
 	
 	public boolean print_bull() { // print bull
 		String quitOption;
+		int count =0;
 		Bulletin.download();
+		
+		sort();
+		
+		
 		for (Bulletin b : Bulletin.bulletin) {
 			b.show_info();
+			count++;
 		}
+		
+		if(count == 0)
+			System.out.println("There is no bulletin !");
+		
+		
+		
 		Scanner sc = new Scanner(System.in);
 			while (true) {
 				System.out.println("If you want to quit, Input quit");
-				quitOption = sc.nextLine();
+				quitOption = sc.next();
 				
 				if (quitOption.equals("quit")) {
 					System.out.println("'print bull' quit");
-					sc.close();
 					return false;
 				}
 				System.out.println("Input value is not quit");
 			}
+		
+	}
+	public void sort() {
+		int num;
+		System.out.println("**********Input Sorting options**********");
+		System.out.println("1. By bulletin_name\t2. By college_name\t3. By_country\t4.By_period\t5.By_required_score\n Input -1 to do not sort");
+		Scanner sc=new Scanner(System.in);
+			num=sc.nextInt();
+		
+		switch(num) {
+		case -1:
+			return;
+		case 1:
+			Bulletin.bulletin.sort((b1,b2)->b1.get_bull_name().compareTo(b2.get_bull_name()));
+			break;
+		case 2:
+			Bulletin.bulletin.sort((b1,b2)->b1.get_coll_name().compareTo(b2.get_coll_name()));
+			break;
+		case 3:
+			Bulletin.bulletin.sort((b1,b2)->b1.get_country().compareTo(b2.get_country()));
+			break;
+		case 4:
+			Bulletin.bulletin.sort((b1,b2)->b1.get_period().compareTo(b2.get_period()));
+			break;
+		case 5:
+			Bulletin.bulletin.sort((b1,b2)->b1.get_req_score().compareTo(b2.get_req_score()));
+			break;
+		}
 		
 	}
 
@@ -52,24 +91,29 @@ public class Manager extends Person { // faculty class
 		String period;
 		String major;
 		boolean find_flag=false; // needed for repitition check of bulletin
-		Bulletin.download();
 		
-		Bulletin.sort_flag=false;
+		Bulletin.download();
+		Status.download();
+		
 		for (Bulletin b : Bulletin.bulletin)
 			b.show_info();
 
 		Scanner sc = new Scanner(System.in);
 			while (true) {
 				find_flag=false;
-				System.out.println("Don't input space in the one info member");
+				System.out.println("Don't input 'space' in the one info member");
 				System.out.println("1. Input add bull name : ");
 				System.out.println("If you want to quit, Input quit");
-				bull_name = sc.nextLine();
+				bull_name = sc.next();
 
 				if (bull_name.equals("quit")) {
 					System.out.println("'add bull' quit");
 					Bulletin.upload();
-					sc.close();
+					
+					
+					Status.step=1;// 1->fisrt apply period
+					Status.upload();
+					
 					return true;
 				}
 				// checking for bulletin name repitition
@@ -85,19 +129,22 @@ public class Manager extends Person { // faculty class
 					continue;
 
 				System.out.print("2. Input add college name : ");
-				col_name = sc.nextLine();
+				col_name = sc.next();
 				System.out.print("3. Input add country : ");
-				country = sc.nextLine();
+				country = sc.next();
 				System.out.print("4. Input add period : ");
-				period = sc.nextLine();
+				period = sc.next();
 				System.out.print("5. Input add major : ");
-				major = sc.nextLine();
+				major = sc.next();
 				System.out.print("6. Input add required grade : ");
-				req_score = sc.nextLine();
+				req_score = sc.next();
 				
 				Bulletin.bulletin.add(new Bulletin(bull_name,col_name,country,period,major,req_score));
 			}
-
+			
+			
+			
+			
 		
 	}
 
@@ -111,19 +158,17 @@ public class Manager extends Person { // faculty class
 		while(true) {
 			find_flag=false;
 			
-			Bulletin.sort_flag=false;
 			for(Bulletin b : Bulletin.bulletin)
 				b.show_info();
 			
 			System.out.println("Input bull name to delete");
 			System.out.println("If you want to quit, Input quit");
-			bull_name = sc.nextLine();
+			bull_name = sc.next();
 			
 			
 			if(bull_name.equals("quit")){
 				System.out.println("'delete bull' quit");
 				Bulletin.upload();
-				sc.close();
 				return true;
 			}
 			itr=Bulletin.bulletin.listIterator();
@@ -168,19 +213,18 @@ public class Manager extends Person { // faculty class
 
 				System.out.println("Input first apply pass student number");
 				System.out.println("If you want to quit, Input quit");
-				stu_num = sc.nextLine();
+				stu_num = sc.next();
 
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_first_apply' quit");
+					Status.step=2;// 2->first apply period
 					Status.upload();
-					Status.step = 2;
-					sc.close();
 					return true;
 				}
 				
 				for(Status s : Status.status) {
 					if(stu_num.equals(s.getNumber())){
-						System.out.println(stu_num + "is passed first apply");
+						System.out.println(stu_num + " is passed first apply");
 						s.first_modify(2);
 						find_flag=true;
 						break;
@@ -219,15 +263,15 @@ public class Manager extends Person { // faculty class
 
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_final_apply' quit");
-					Status.upload();
 					Status.step = 3;
-					sc.close();
+					Status.upload();
 					return true;
 				}
 				for (Status s : Status.status) {
 					if (stu_num.equals(s.getNumber())) {
 						System.out.println(stu_num + "is passed final apply");
 						s.second_modify(2);
+						s.makeCourses();
 						find_flag = true;
 						break;
 					}
@@ -262,14 +306,13 @@ public class Manager extends Person { // faculty class
 
 				System.out.println("Input transfercredit apply pass student number");
 				System.out.println("If you want to quit, Input quit");
-				stu_num = sc.nextLine();
+				stu_num = sc.next();
 
 				if (stu_num.equals("quit")) {
 					System.out.println("'handle_transfercredit_apply' quit");
 					Status.upload();
 					Status.step = 5;
 					dispatch_add();
-					sc.close();
 					return true;
 				}
 				for (Status s : Status.status) {
@@ -298,10 +341,9 @@ public class Manager extends Person { // faculty class
 				System.out.println("Input dispatch record period you want");
 				System.out.println("ex) 2018_1");
 				System.out.println("If you want to quit, Input quit");
-				a = sc.nextLine();
+				a = sc.next();
 				if (a.equals("quit")) {
 					System.out.println("'see dispatch record' quit");
-					sc.close();
 					return true;
 				} 
 				else {
@@ -328,7 +370,7 @@ public class Manager extends Person { // faculty class
 			while (true) {
 				System.out.println("**********Manager Options**********");
 				System.out.println("1. print Bull\n" + "2. post bull\n" + "3. delete bull\n" + "4. handle_first_apply\n"
-						+ "5. record final result\n" + "6. record transfer result\n" + "7. see dispatch record\n"
+						+ "5. handle final result\n" + "6. handle transfer result\n" + "7. see dispatch record\n"
 						+ "8. logout");
 
 				while (true) {
@@ -362,7 +404,6 @@ public class Manager extends Person { // faculty class
 					see_dispatch_rec();
 					break;
 				case 8:
-					sc.close();
 					return true;
 				}
 
