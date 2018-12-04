@@ -128,7 +128,7 @@ public class Student extends Person {
 		
 		Scanner sc = new Scanner(System.in);
 
-			System.out.println("Input quit to quit cancel_apply");
+			System.out.println("Input quit to quit cancel_apply(Otherwise press any key to continue)");
 			quitOption = sc.next();
 			if (quitOption.equals("quit")) {
 				Status.upload();
@@ -184,7 +184,7 @@ public class Student extends Person {
 		
 		Scanner sc = new Scanner(System.in);
 
-			System.out.println("Input quit to Quit");
+			System.out.println("Input quit to Quit(Otherwise press any key to continue)");
 			quitOption = sc.next();
 			if (quitOption.equals("quit")) {
 				Status.upload();
@@ -220,10 +220,8 @@ public class Student extends Person {
 	public int see_Applicable_bull() {
 		int count = -1;
 		Bulletin.download();
-		System.out.println("郴 己利 : "+score);
 		for(Bulletin b : Bulletin.bulletin){
 			count++; 
-			System.out.println("鞘夸 己利 : "+b.getRequiredScore());
 			if (score.compareTo(b.getRequiredScore()) <= 0) 
 			{
 				System.out.print(count+"\t");
@@ -257,7 +255,7 @@ public class Student extends Person {
 		
 				
 		Scanner sc=new Scanner(System.in);
-			System.out.println("Input quit to Quit");
+			System.out.println("Input quit to Quit(Otherwise press any key to continue)");
 			quitOption=sc.nextLine();
 			if(quitOption.equals("quit")) {
 				Status.upload();
@@ -302,7 +300,7 @@ public class Student extends Person {
 	
 
 		Scanner sc=new Scanner(System.in);
-			System.out.println("Input quit to Quit");
+			System.out.println("Input quit to Quit(Otherwise press any key to continue)");
 			quitOption=sc.next();
 			if(quitOption.equals("quit")) {
 				Status.upload();
@@ -338,10 +336,33 @@ public class Student extends Person {
 	
 	}
 
+	public void sort() {
+		int num;
+		System.out.println("**********Input Sorting options**********");
+		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to quit");
+		Scanner sc=new Scanner(System.in);
+			num=sc.nextInt();
+		
+		switch(num) {
+		case -1:
+			return;
+		case 1:
+			Dispatch_Record.dispatch_record.sort((d1,d2)->d1.get_coll_name().compareTo(d2.get_coll_name()));
+			break;
+		case 2:
+			Dispatch_Record.dispatch_record.sort((d1,d2)->d1.get_period().compareTo(d2.get_period()));
+			break;
+		case 3:
+			Dispatch_Record.dispatch_record.sort((d1,d2)->d1.get_major().compareTo(d2.get_major()));
+			break;
+		}
+	}
+	
 	public void see_dispatch_record() { // see dispatch record
 		int count = -1;
 		Dispatch_Record.download();
-		Dispatch_Record.sort_flag=false;
+
+		sort();
 		for(Dispatch_Record b : Dispatch_Record.dispatch_record){
 			count++; 
 			System.out.print(count+"\t");
@@ -371,7 +392,7 @@ public class Student extends Person {
 		Scanner sc = new Scanner(System.in);
 
 			find_flag1 = false;
-			System.out.println("If you want to quit, Input quit");
+			System.out.println("If you want to quit, Input quit(Otherwise press any key to continue)");
 			quitOption = sc.next();
 
 			if (quitOption.equals("quit")) {

@@ -19,10 +19,10 @@ public class Document implements Serializable{
 		this.doc_type=doc_type;
 	}
 	public void show_info() {
-		System.out.println("Student num: " + stu_num);
-		System.out.println("Student name: " + stu_name);
-		System.out.println("College name: " + coll_name);
-		System.out.println("Document type: " + doc_type);
+		System.out.print("Student num: " + stu_num);
+		System.out.print("\tStudent name: " + stu_name);
+		System.out.print("\tCollege name: " + coll_name);
+		System.out.println("\tDocument type: " + doc_type);
 		
 	}
 	public void countAdder() {

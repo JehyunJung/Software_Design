@@ -238,7 +238,7 @@ public class Status implements Serializable {
 			temp = (Status)oi.readObject();		
 			if(temp==null) {
 				if(count==0) {
-					System.out.println("there is no reading things2");
+					System.out.println("there is nothing to reads");
 					return false;
 				}
 				return true;
@@ -250,7 +250,7 @@ public class Status implements Serializable {
 			while (true) {
 				Status mytemp=(Status)oi.readObject();
 				if (mytemp == null) {
-					System.out.println("Status.bin has reached EOF");
+					//System.out.println("Status.bin has reached EOF");
 					break;
 				}
 					

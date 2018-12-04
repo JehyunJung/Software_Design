@@ -14,6 +14,7 @@ public class Dispatch_Record{
 	String coll_name;			//college name
 	String period;				//exchange student period
 	String major;				//exchange student major
+	public static int count=0;
 	public static boolean sort_flag=false;		//checking for sorting repitition
 	public static LinkedList<Dispatch_Record> dispatch_record=new LinkedList<>();	//Linkedlist of Dispatch
 	public Dispatch_Record(String c_name, String period, String major) {
@@ -93,34 +94,8 @@ public class Dispatch_Record{
 		}
 
 	}
-	public void sort() {
-		int num;
-		System.out.println("**********Input Sorting options**********");
-		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to quit");
-		Scanner sc=new Scanner(System.in);
-			num=sc.nextInt();
-		
-		switch(num) {
-		case -1:
-			return;
-		case 1:
-			dispatch_record.sort((d1,d2)->d1.get_coll_name().compareTo(d2.get_coll_name()));
-			break;
-		case 2:
-			dispatch_record.sort((d1,d2)->d1.get_period().compareTo(d2.get_period()));
-			break;
-		case 3:
-			dispatch_record.sort((d1,d2)->d1.get_major().compareTo(d2.get_major()));
-			break;
-		}
-	}
-	
+
 	public void show_info() {
-		if(Dispatch_Record.sort_flag!=true) {
-			sort();
-			Dispatch_Record.sort_flag=true;
-		}
-	
 		System.out.print("College_name: " + coll_name);		//print college name
 		System.out.print("\tPeriod: " + period);			//print exchange student period
 		System.out.println("\tMajor: " + major);				//print exchange student major

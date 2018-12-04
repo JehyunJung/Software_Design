@@ -12,23 +12,27 @@ public class Manager extends Person { // faculty class
 	}
 
 	public void dispatch_add() {
+		if(Dispatch_Record.download()==false && Dispatch_Record.count!=0) {
+			System.out.println("Dispatch Record not found");
+		}
 		Dispatch_Record.download();
 		if(Status.download() == false) {
 			System.out.println("Status not found ");
 			return;
 		}for(Status s : Status.status) {
-			if(s.getStat2() == 2)
+			if(s.getStat3() == 2)
 				Dispatch_Record.add_Dispatch_to_list((s.getApplication()).get_coll_name(),(s.getApplication()).get_period(), (s.getApplication()).get_major());
 		}
 		Dispatch_Record.upload();
 	}
+	
 	
 	public boolean print_bull() { // print bull
 		String quitOption;
 		int count =0;
 		Bulletin.download();
 		
-		sort();
+		sort_Bull();
 		
 		
 		for (Bulletin b : Bulletin.bulletin) {
@@ -54,12 +58,17 @@ public class Manager extends Person { // faculty class
 			}
 		
 	}
-	public void sort() {
+	public void sort_Bull() {
 		int num;
 		System.out.println("**********Input Sorting options**********");
 		System.out.println("1. By bulletin_name\t2. By college_name\t3. By_country\t4.By_period\t5.By_required_score\n Input -1 to do not sort");
+		while(true) {
 		Scanner sc=new Scanner(System.in);
 			num=sc.nextInt();
+			if(num>=1 && num<=5 || num!=-1)
+				break;
+			System.out.println("Wrong input");
+		}
 		
 		switch(num) {
 		case -1:
@@ -293,6 +302,7 @@ public class Manager extends Person { // faculty class
 			return false;
 		}
 		
+		
 		if (Status.transfer_credit_application_check() != true) {
 			System.out.println("Not appropriate step");
 			Status.upload();
@@ -327,15 +337,42 @@ public class Manager extends Person { // faculty class
 					continue;
 				System.out.println("input student number not exist");
 			}
+			
 		
 	}
-
+	
+	public void sort_Dispatch() {
+		int num;
+		System.out.println("**********Input Sorting options**********");
+		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to quit");
+		while(true) {
+		Scanner sc=new Scanner(System.in);
+			num=sc.nextInt();
+			if(num>=1 && num<=3 || num==-1)
+				break;
+			System.out.println("Wrong input");
+		}
+		
+		switch(num) {
+		case -1:
+			return;
+		case 1:
+			Dispatch_Record.dispatch_record.sort((d1,d2)->d1.get_coll_name().compareTo(d2.get_coll_name()));
+			break;
+		case 2:
+			Dispatch_Record.dispatch_record.sort((d1,d2)->d1.get_period().compareTo(d2.get_period()));
+			break;
+		case 3:
+			Dispatch_Record.dispatch_record.sort((d1,d2)->d1.get_major().compareTo(d2.get_major()));
+			break;
+		}
+	}
 	public boolean see_dispatch_rec() { // see dispatch record
 		String a;
 		int count=0;
 		Dispatch_Record.download();
-		Dispatch_Record.sort_flag=false;
 		
+		sort_Dispatch();
 		Scanner sc = new Scanner(System.in);
 			while (true) {
 				System.out.println("Input dispatch record period you want");

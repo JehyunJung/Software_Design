@@ -16,15 +16,15 @@ public class Course implements Serializable {
 		this.Course_name=name;
 		int rnum;
 		SecureRandom raf=new SecureRandom();
-		rnum=raf.nextInt()%100;
+		rnum=Math.abs(raf.nextInt())%100;
 		
 		if(rnum>70)
 			this.score='A';
 		else if(rnum>60)
 			this.score='B';
-		else if(rnum>50)
-			this.score='C';
 		else if(rnum>40)
+			this.score='C';
+		else if(rnum>30)
 			this.score='D';
 		else
 			this.score='F';
