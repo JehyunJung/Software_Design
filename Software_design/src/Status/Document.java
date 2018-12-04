@@ -11,7 +11,8 @@ public class Document implements Serializable{
 	String stu_name;		// student name
 	String coll_name;		// college name
 	String doc_type;		// document type
-	int count=0;
+	public static int count=0;
+
 	public Document(String stu_num, String stu_name, String col_name, String doc_type) {
 		this.stu_num=stu_num;
 		this.stu_name=stu_name;
@@ -23,12 +24,5 @@ public class Document implements Serializable{
 		System.out.print("\tStudent name: " + stu_name);
 		System.out.print("\tCollege name: " + coll_name);
 		System.out.println("\tDocument type: " + doc_type);
-		
-	}
-	public void countAdder() {
-		count++;
-	}
-	public int getCount() {
-		return count;
 	}
 }

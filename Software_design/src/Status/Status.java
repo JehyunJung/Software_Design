@@ -25,7 +25,7 @@ public class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
 	String stu_name;
 	String stu_num;
-
+	public static int doc_count=0;	//document count
 	public static int step; // Current application step
 
 	int first_stat; // first application status
@@ -119,21 +119,22 @@ public class Status implements Serializable {
 
 	public void show_first_applicant_info() {
 		if(first_stat==1 ) {
-			System.out.print("\tStudent name: " + stu_name);
+			System.out.print("Student name: " + stu_name);
 			System.out.println("\t Student number: " + stu_num);
+			System.out.println("**********Document List**********");
 			for(Document d:document)
 				d.show_info();
 		}
 	}
 	public void show_final_applicant_info() {
 		if(final_stat==1 ) {
-			System.out.print("\tStudent name: " + stu_name);
+			System.out.print("Student name: " + stu_name);
 			System.out.println("\t Student number: " + stu_num);
 		}
 	}
 	public void show_transfercredit_applicant_info() {
 		if(transfer_stat==1) {
-			System.out.print("\tStudent name: " + stu_name);
+			System.out.print("Student name: " + stu_name);
 			System.out.println("\t Student number: " + stu_num);
 		}
 	}
@@ -143,10 +144,10 @@ public class Status implements Serializable {
 			System.out.println("You have failed to exchange school program... SORRY~~");
 			return;
 		}*/
-		System.out.print("Step: " + Status.step);
-		System.out.print("\tFirst Stat: " + first_stat);
-		System.out.print("\tSecond Stat: " + final_stat);
-		System.out.println("\tTransfer Stat: " + transfer_stat);
+		System.out.print("Step: " + printStep(Status.step));
+		System.out.print("\tFirst Stat: " + printStat(first_stat));
+		System.out.print("\tSecond Stat: " + printStat(final_stat));
+		System.out.println("\tTransfer Stat: " + printStat(transfer_stat));
 		System.out.println(application.get_bull_name());
 		
 		see_course();
@@ -292,6 +293,7 @@ public class Status implements Serializable {
 		System.out.println("Count: " + count);
 		while(true) {
 			if(course_Count==6)
+				
 				break;
 			index = Math.abs(sr.nextInt()) % count;
 			System.out.println("INDEX : " + index);
@@ -310,5 +312,44 @@ public class Status implements Serializable {
 		}
 		
 	}
-
+	
+	private String printStep(int step)
+	{
+		switch(step)
+		{
+		case 1:
+			return String.format("First Apply Period");
+			
+		case 2:
+			return String.format("Final Apply Period");
+			
+		case 3:
+			return String.format("TransferCredit Apply Period");
+			
+		case 5:
+			return String.format("Non-Applicensing Period");
+		default:
+			return String.format("?");
+		}
+	}
+	private String printStat(int stat)
+	{
+		switch(stat)
+		{
+		case 0:
+			return String.format("Not Applied");
+			
+		case 1:
+			return String.format("Applied");
+			
+		case 2:
+			return String.format("Passed");
+			
+		case 3:
+			return String.format("Failed");
+		default:
+			return String.format("?");
+			
+		}
+	}
 }

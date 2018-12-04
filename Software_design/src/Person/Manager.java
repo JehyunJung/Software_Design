@@ -1,11 +1,13 @@
 package Person;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.ListIterator;
 import java.util.Scanner;
 
 import Bulletin.*;
 import Status.*;
+import jdk.internal.jline.console.ConsoleReader;
 
 public class Manager extends Person { // faculty class
 	public Manager(String name, String number) {
@@ -216,10 +218,16 @@ public class Manager extends Person { // faculty class
 		Scanner sc = new Scanner(System.in);
 			while (true) {
 				find_flag=false;
-				for (Status s : Status.status)
+				System.out.println("**********First Applicants**********");
+				
+				for (Status s : Status.status) {
+					if(s.getStat1()==1)
+						System.out.println("*********" + s.getNumber() + "'s applied info**********");
 					s.show_first_applicant_info();
-
-		
+					System.out.println("\n\n\n");
+				}
+				for(int i=0;i<5;i++)
+					System.out.println();
 
 				System.out.println("Input first apply pass student number");
 				System.out.println("If you want to quit, Input quit");
@@ -265,40 +273,49 @@ public class Manager extends Person { // faculty class
 			return false;
 		}
 		Scanner sc = new Scanner(System.in);
-			while (true) {
-				find_flag = false;
-				for (Status s : Status.status)
-					s.show_final_applicant_info();
+		while (true) {
+			find_flag = false;
 
+			System.out.println("**********Final Applicants**********");
 
-				System.out.println("Input final apply pass student number");
-				System.out.println("If you want to quit, Input quit");
-				stu_num = sc.nextLine();
-
-				if (stu_num.equals("quit")) {
-					System.out.println("'handle_final_apply' quit");
-					
-					for(Status b : Status.status) 
-						if(b.getStat2() != 2) b.second_modify(3);
-					
-					Status.step = 3;
-					Status.upload();
-					return true;
-				}
-				for (Status s : Status.status) {
-					if (stu_num.equals(s.getNumber())) {
-						System.out.println(stu_num + "is passed final apply");
-						s.second_modify(2);
-						s.makeCourses();
-						find_flag = true;
-						break;
-					}
-				}
-				if (find_flag)
-					continue;
-				System.out.println("input student number not exist");
-
+			for (Status s : Status.status) {
+				if (s.getStat2() == 1)
+					System.out.println("*********" + s.getNumber() + "'s applied info**********");
+				s.show_final_applicant_info();
+				System.out.println("\n\n\n");
 			}
+			for (int i = 0; i < 5; i++)
+				System.out.println();
+
+			System.out.println("Input final apply pass student number");
+			System.out.println("If you want to quit, Input quit");
+			stu_num = sc.nextLine();
+
+			if (stu_num.equals("quit")) {
+				System.out.println("'handle_final_apply' quit");
+
+				for (Status b : Status.status)
+					if (b.getStat2() != 2)
+						b.second_modify(3);
+
+				Status.step = 3;
+				Status.upload();
+				return true;
+			}
+			for (Status s : Status.status) {
+				if (stu_num.equals(s.getNumber())) {
+					System.out.println(stu_num + "is passed final apply");
+					s.second_modify(2);
+					s.makeCourses();
+					find_flag = true;
+					break;
+				}
+			}
+			if (find_flag)
+				continue;
+			System.out.println("input student number not exist");
+
+		}
 
 		
 	}
@@ -320,8 +337,17 @@ public class Manager extends Person { // faculty class
 		Scanner sc = new Scanner(System.in) ;
 			while (true) {
 				find_flag=false;
-				for (Status s : Status.status)
-					s.show_transfercredit_applicant_info();		
+				System.out.println("**********Transfer_credit Applicants**********");
+
+				for (Status s : Status.status) {
+					if (s.getStat3() == 1)
+						System.out.println("*********" + s.getNumber() + "'s applied info**********");
+					s.show_transfercredit_applicant_info();
+					System.out.println("\n\n\n");
+				}
+				for (int i = 0; i < 5; i++)
+					System.out.println();
+
 
 				System.out.println("Input transfercredit apply pass student number");
 				System.out.println("If you want to quit, Input quit");
@@ -359,7 +385,7 @@ public class Manager extends Person { // faculty class
 	public void sort_Dispatch() {
 		int num;
 		System.out.println("**********Input Sorting options**********");
-		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to quit");
+		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to print without sorting");
 		while(true) {
 		Scanner sc=new Scanner(System.in);
 			num=sc.nextInt();
@@ -390,7 +416,11 @@ public class Manager extends Person { // faculty class
 		sort_Dispatch();
 		Scanner sc = new Scanner(System.in);
 			while (true) {
-				System.out.print("Input dispatch record period you want");
+				System.out.println("\n**********Dispatch_Record**********");
+				for(Dispatch_Record d : Dispatch_Record.dispatch_record)
+					d.show_info();
+				System.out.println();
+				System.out.print("Input dispatch record period you want  ");
 				System.out.println("ex) 2018_1");
 				System.out.println("If you want to quit, Input quit");
 				a = sc.next();
@@ -399,6 +429,7 @@ public class Manager extends Person { // faculty class
 					return true;
 				} 
 				else {
+					System.out.println("\n**********Dispatch_Record for " + a + "**********");
 					for (Dispatch_Record d : Dispatch_Record.dispatch_record)
 					{
 						if((d.get_period()).equals(a))
@@ -407,6 +438,7 @@ public class Manager extends Person { // faculty class
 							count++;
 						}
 					}	
+					System.out.println();
 					if(count==0)
 						System.out.println("Input value is error");
 					count=0;
@@ -415,15 +447,16 @@ public class Manager extends Person { // faculty class
 			}
 		
 	}
-
 	public boolean manager_option() {
 		int menu_option;
 		Scanner sc = new Scanner(System.in);
-	
+		
 			while (true) {
+				for(int i=0;i<10;i++)
+					System.out.println();
 				System.out.println("**********Manager Options**********");
 				System.out.println("1. print Bull\n" + "2. post bull\n" + "3. delete bull\n" + "4. handle_first_apply\n"
-						+ "5. handle final result\n" + "6. handle transfer result\n" + "7. see dispatch record\n"
+						+ "5. handle final apply\n" + "6. handle transfer apply\n" + "7. see dispatch record\n"
 						+ "8. logout");
 
 				while (true) {

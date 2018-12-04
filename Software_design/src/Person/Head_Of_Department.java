@@ -28,14 +28,15 @@ public class Head_Of_Department extends Person {
 		}
 		
 			while (true) {
+				Course.count = -1;
+				courseNameList.clear();
+				
 				System.out.println("**********Major applied course***********");
-				for (Status s : Status.status) {
-					Course.count = 0;
+				for (Status s : Status.status) {					
 					for (Course c : s.getCourse())
 					{
 						courseNameList.add(c.getName());
-						if(c.get_major()==false)
-							c.see_applied_course(); // Course.count increases
+						c.see_applied_course(); // Course.count increases
 					}
 				}
 
@@ -55,7 +56,7 @@ public class Head_Of_Department extends Person {
 				
 				for (Status b : Status.status) {
 					for (Course c : b.getCourse()) {
-						if (corNum.equals(c.getName()) && c.get_major_stat() == true && c.get_major() != true) {
+						if (corName.equals(c.getName()) && c.get_major_stat() == true && c.get_major() != true) {
 							c.set_major(true);
 							find_flag = true;
 						}
@@ -74,6 +75,8 @@ public class Head_Of_Department extends Person {
 		Scanner sc = new Scanner(System.in);
 	
 			while (true) {
+				for(int i=0;i<10;i++)
+					System.out.println();
 				System.out.println("**********Head Of Department Options**********");
 				System.out.println("1. handle major applications\n" + "2. logout");
 				while (true) {

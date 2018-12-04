@@ -49,7 +49,7 @@ class Information_class implements Serializable{
 
 public class Application { 
 	public static void main(String[] args) {
-		System.out.println("**********Login Section***********");
+		
 		login();
 		//makeCOURSE_DB();
 		//makeLOGIN_DB();
@@ -205,6 +205,9 @@ public class Application {
 		System.out.println("STATUS ( STEP : " + Status.step + ")" );
 		
 		while (true) {
+			for(int i=0;i<10;i++)
+				System.out.println();
+			System.out.println("**********Login Section***********");
 			System.out.println("If you want to quit login insert 'quit'");
 			System.out.println("Input ID : ");
 			ID = sc.next();
@@ -235,9 +238,9 @@ public class Application {
 					count++;
 
 					if (ID.equals(info.ID)) {
+						find_flag=true;
 						if (PW.equals(info.PW)) {
 							System.out.println("Login successed");
-							find_flag = true;
 							switch (info.type) {
 							case 0:
 								Student student = new Student(info.name, info.num, info.score);
@@ -255,7 +258,8 @@ public class Application {
 									logout_flag=true;
 								break;
 							}
-						} else {
+						} 
+						else {
 							System.out.println("Password is wrong\n");
 							break;
 						}

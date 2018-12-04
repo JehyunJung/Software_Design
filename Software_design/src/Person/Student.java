@@ -33,8 +33,11 @@ public class Student extends Person {
 		for(Status b : Status.status)
 			if(this.number.equals(b.getNumber()))
 			{
+				for(int i=0;i<5;i++)
+					System.out.println();
+				System.out.println("**********" + this.number + "'s status**********");
 				b.show_info();
-				System.out.println("Document List");
+				System.out.println("**********Document List**********");
 				for (Document d : b.getDocument()) {
 					d.show_info();
 				}
@@ -56,6 +59,7 @@ public class Student extends Person {
 			System.out.println("Status not found ");
 			return;
 		}
+	
 		
 		if(Status.first_application_check()!=true) {
 			System.out.println("It is not the period for first apply ");
@@ -100,9 +104,10 @@ public class Student extends Person {
 			for(Status s: Status.status)
 			{
 				if(number.equals(s.getNumber())) {
+					document=s.getDocument();
 					Document temp=new Document(name,number,col_name,doc_type);
-					if(doc_count==0) {
-						doc_count++;
+					if(s.doc_count==0) {
+						s.doc_count++;
 						document.add(temp);
 						s.setDocument(document);
 					}
@@ -324,10 +329,10 @@ public class Student extends Person {
 	
 	}
 
-	public void sort() {
+	public void sort_Dispatch() {
 		int num;
 		System.out.println("**********Input Sorting options**********");
-		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to quit");
+		System.out.println("1. By college_name\t2. By period\t3. By major\n Input -1 to print without sorting");
 		Scanner sc=new Scanner(System.in);
 			num=sc.nextInt();
 		
@@ -346,18 +351,45 @@ public class Student extends Person {
 		}
 	}
 	
-	public void see_dispatch_record() { // see dispatch record
-		int count = -1;
+	public boolean see_dispatch_rec() { // see dispatch record
+		String a;
+		int count=0;
 		Dispatch_Record.download();
-
-		sort();
-		for(Dispatch_Record b : Dispatch_Record.dispatch_record){
-			count++; 
-			System.out.print(count+"\t");
-			b.show_info();		
-		}
+		
+		sort_Dispatch();
+		Scanner sc = new Scanner(System.in);
+			while (true) {
+				System.out.println("\n**********Dispatch_Record**********");
+				for(Dispatch_Record d : Dispatch_Record.dispatch_record)
+					d.show_info();
+				System.out.println();
+				System.out.print("Input dispatch record period you want   ");
+				System.out.println("ex) 2018_1");
+				System.out.println("If you want to quit, Input quit");
+				a = sc.next();
+				if (a.equals("quit")) {
+					System.out.println("'see dispatch record' quit");
+					return true;
+				} 
+				else {
+					System.out.println("\n**********Dispatch_Record for " + a + "**********");
+					for (Dispatch_Record d : Dispatch_Record.dispatch_record)
+					{
+						if((d.get_period()).equals(a))
+						{
+							d.show_info();
+							count++;
+						}
+					}	
+					System.out.println();
+					if(count==0)
+						System.out.println("Input value is error");
+					count=0;
+					continue;
+				}	
+			}
+		
 	}
-
 	public boolean major_apply() {
 		
 		Boolean find_flag1, find_flag2;
@@ -396,8 +428,10 @@ public class Student extends Person {
 				continue;
 
 			if (find_flag1) {
+				
 				while (true) {
 					System.out.println("**********" + number + "'s course list**********");
+					count=-1;
 					for (Course c : course) {
 						++count;
 						if (c.get_major_stat() == false)
@@ -436,8 +470,10 @@ public class Student extends Person {
 	public boolean student_option()throws NoSuchElementException {
 		int menu_option;
 		Scanner sc = new Scanner(System.in);
-		
+
 		while (true) {
+			for(int i=0;i<10;i++)
+				System.out.println();
 			System.out.println("**********Student Options**********");
 			System.out.println("1. search for student's current status\n" + "2. print appliable Bulletin and apply\n"
 					+ "3. register document\n" + "4. final application\n" + "5. apply for major course\n"
@@ -473,7 +509,7 @@ public class Student extends Person {
 				cancel_apply();
 				break;
 			case 8:
-				see_dispatch_record();
+				see_dispatch_rec();
 				break;
 			case 9:
 				return true;
